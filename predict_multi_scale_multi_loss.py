@@ -21,8 +21,8 @@ def _initialize_arguments(p: configargparse.ArgParser):
     p.add('--result_file', help='pred result file path', type=str)
 
     args = p.parse_args()
-    args.test_file = "%s/p8_fold3_test.txt" % args.data_dir
-    args.model_directory = "%s/%s_%s" % (args.model_directory, args.prompt, args.fold)
+    args.test_file = "%s/%s_test.txt" % (args.data_dir, args.prompt)  # MODIFIED FROM ORIGINAL
+    args.model_directory = "%s/p8_3" % (args.model_directory)
     args.bert_model_path = args.model_directory
 
     if torch.cuda.is_available() and args.cuda:
