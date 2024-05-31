@@ -33,35 +33,46 @@ def fix_score(score, prompt):
     """
     fix the predicted score
     """
-    if prompt == 9:  # telis
-        int_part = float(int(score))
-        float_part = score - int_part
-        result = int_part
-        if float_part < 0.25:
-            result = int_part
-        elif float_part < 0.75:
-            result = int_part + 0.5
-        else:
-            result = int_part + 1
+    # if prompt == 9:  # telis
+    #     int_part = float(int(score))
+    #     float_part = score - int_part
+    #     result = int_part
+    #     if float_part < 0.25:
+    #         result = int_part
+    #     elif float_part < 0.75:
+    #         result = int_part + 0.5
+    #     else:
+    #         result = int_part + 1
 
-        min_score, max_score = asap_ranges[prompt]
-        if result < min_score:
-            return min_score
-        elif result > max_score:
-            return max_score
-        else:
-            return result
+    #     min_score, max_score = asap_ranges[prompt]
+    #     if result < min_score:
+    #         return min_score
+    #     elif result > max_score:
+    #         return max_score
+    #     else:
+    #         return result
 
-    elif prompt <= 10:
-        min_score, max_score = asap_ranges[prompt]
-        if score < min_score:
-            return min_score
-        elif score > max_score:
-            return max_score
-        else:
-            return round(score)
-    else:
-        return score
+    # elif prompt <= 10:
+    #     min_score, max_score = asap_ranges[prompt]
+    #     if score < min_score:
+    #         return min_score
+    #     elif score > max_score:
+    #         return max_score
+    #     else:
+    #         return round(score)
+    # else:
+    #     return score
+
+    min_score, max_score = asap_ranges[prompt]
+
+    if score < min_score:
+        score = min_score
+    elif score > max_score:
+        score = max_score
+
+    norm_score = (score / 60 / max_score) + min_score
+
+    return norm_score
 
 
 def is_zh(s):

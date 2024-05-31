@@ -1,4 +1,6 @@
 from scipy.stats import pearsonr
+from sklearn.metrics import cohen_kappa_score
+
 import numpy as np
 
 
@@ -166,3 +168,13 @@ def evaluation_low_score(true_score, pre_score, low_score):
 
     return low_score_recall, low_score_precision, low_score_f1
 
+
+if __name__ == "__main__":
+
+    with open('results/pred-crc-8.txt') as src:
+        results = [tuple(map(float, scores.split())) for scores in src.readlines()]
+
+    rater1, rater2 = map(np.array, zip(*results))
+
+    print(quadratic_weighted_kappa(rater_a=rater1, rater_b=rater2))
+    print(cohen_kappa_score(y1=rater1, y2=rater2, weights='quadratic'))
