@@ -70,7 +70,7 @@ def fix_score(score, prompt):
     elif score > max_score:
         score = max_score
 
-    norm_score = (score / 60 / max_score) + min_score
+    norm_score = (score / (60 / max_score)) + min_score
 
     return norm_score
 
