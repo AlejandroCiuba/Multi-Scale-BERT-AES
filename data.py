@@ -63,16 +63,18 @@ def fix_score(score, prompt):
     # else:
     #     return score
 
-    min_score, max_score = asap_ranges[prompt]
+    # min_score, max_score = asap_ranges[prompt]
 
-    if score < min_score:
-        score = min_score
-    elif score > max_score:
-        score = max_score
+    # if score < min_score:
+    #     score = min_score
+    # elif score > max_score:
+    #     score = max_score
 
-    norm_score = (score / (60 / max_score)) + min_score
+    # norm_score = (score / (60 / max_score)) + min_score
 
-    return norm_score
+    # return norm_score
+
+    return score
 
 
 def is_zh(s):
