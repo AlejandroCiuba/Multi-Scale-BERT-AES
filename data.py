@@ -1,4 +1,9 @@
+from scipy.stats import spearmanr
+
 import random
+
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 asap_ranges = {
     1: (2.0, 12.0),
@@ -114,3 +119,15 @@ def load_asap_data(data_file, max_len=1024, data_sample_rate=1.0):
                 labels.append(float(line_vec[1]))
     for id, text, label in zip(ids, texts, labels):
         yield (id, text, label)
+
+
+if __name__ == "__main__":
+
+    # Perform Spearman's Correlation
+    with open('results/no-fix/pred-crc-6.txt') as src:
+        y, X = list(zip(*[(float(line.split()[0]), float(line.split()[1])) for line in src]))
+
+    print(spearmanr(X, y))
+
+    sns.scatterplot(x=X, y=y)
+    plt.show()
