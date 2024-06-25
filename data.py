@@ -1,6 +1,7 @@
 from scipy.stats import spearmanr
 
 import random
+import sys
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -123,11 +124,19 @@ def load_asap_data(data_file, max_len=1024, data_sample_rate=1.0):
 
 if __name__ == "__main__":
 
+    file = str(sys.argv[1])
+
     # Perform Spearman's Correlation
-    with open('results/no-fix/pred-crc-6.txt') as src:
+    with open(f'results/no-fix/pred-crc-{file}.txt', 'r') as src:
         y, X = list(zip(*[(float(line.split()[0]), float(line.split()[1])) for line in src]))
 
-    print(spearmanr(X, y))
+    with open(f'results/plots-corr/spearman-{file}.txt', 'w+') as dst:
+        dst.write("Spearman correlation on the untransformed outputs and the gold labels\n")
+        dst.write(f"{str(spearmanr(X, y))}\n")
 
     sns.scatterplot(x=X, y=y)
-    plt.show()
+    plt.xlabel("Model Output")
+    plt.ylabel(f"Prompt {file} Gold Labels")
+    plt.title(f"Model Output vs. Prompt {file} Gold Labels")
+
+    plt.savefig(f'results/plots-corr/spearman-{file}.png')
