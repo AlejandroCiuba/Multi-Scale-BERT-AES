@@ -23,10 +23,10 @@ def main(args: argparse.Namespace):
 
     model.fit(X, y)
 
-    y_pred = float(int(model.predict(X)))
+    y_pred = model.predict(X)
 
-    print(accuracy_score(y, y_pred))
-    print(precision_recall_fscore_support(y, y_pred))
+    print(accuracy_score(y, y_pred.round()))
+    print(precision_recall_fscore_support(y, y_pred.round()))
 
 def add_args(parser: argparse.ArgumentParser):
 
