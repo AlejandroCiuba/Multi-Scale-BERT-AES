@@ -126,10 +126,10 @@ if __name__ == "__main__":
     # TODO: CHANGE THIS WHENEVER MAKING A NEW FIX
     # Perform Spearman's Correlation
     with open(f'results/fix1/pred-crc-{file}.txt', 'r') as src:
-        y, X = list(zip(*[(float(line.split()[0]), float(line.split()[1])) for line in src]))
+        y, X = list(zip(*[(float(line.split()[0]), int(float(line.split()[1]))) for line in src]))
 
     # TODO: CHANGE THIS WHENEVER MAKING A NEW FIX
-    with open(f'results/fix1-plots-corr/spearman-{file}.txt', 'w+') as dst:
+    with open(f'results/fix2-plots-corr/spearman-{file}.txt', 'w+') as dst:
         dst.write("Spearman correlation on the transformed outputs and the gold labels\n")
         dst.write(f"{str(spearmanr(X, y))}\n")
 
@@ -139,4 +139,4 @@ if __name__ == "__main__":
     plt.title(f"Model Output vs. Prompt {file} Gold Labels")
 
     # TODO: CHANGE THIS WHENEVER MAKING A NEW FIX
-    plt.savefig(f'results/fix1-plots-corr/spearman-{file}.png')
+    plt.savefig(f'results/fix2-plots-corr/spearman-{file}.png')
