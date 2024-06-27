@@ -1,7 +1,12 @@
 from scipy.stats import pearsonr
 from sklearn.metrics import cohen_kappa_score
 
+import sys
+
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import seaborn as sns
 
 
 def confusion_matrix(rater_a, rater_b, min_rating=None, max_rating=None):
@@ -171,10 +176,30 @@ def evaluation_low_score(true_score, pre_score, low_score):
 
 if __name__ == "__main__":
 
-    with open('results/pred-crc-8.txt') as src:
-        results = [tuple(map(float, scores.split())) for scores in src.readlines()]
+    plt.style.use('ggplot')
 
-    rater1, rater2 = map(np.array, zip(*results))
+    scores = {"name": [],
+              "qwk-multi": [],
+              "qwk-sklearn": [], }
 
-    print(quadratic_weighted_kappa(rater_a=rater1, rater_b=rater2))
-    print(cohen_kappa_score(y1=rater1, y2=rater2, weights='quadratic'))
+    for i in range(1, 9):
+
+        with open(f'results/fix1/pred-crc-{i}.txt', 'r') as src:
+            results = [tuple(map(lambda x: int(float(x)), scores.split())) for scores in src.readlines()]
+
+        rater1, rater2 = map(np.array, zip(*results))
+
+        scores["name"].append(f"8-to-{i}")
+        scores["qwk-multi"].append(quadratic_weighted_kappa(rater_a=rater1, rater_b=rater2))
+        scores["qwk-sklearn"].append(cohen_kappa_score(y1=rater1, y2=rater2, weights='quadratic'))
+
+    scores_df = pd.DataFrame(scores).sort_values(by="qwk-multi")
+
+    ax = sns.barplot(data=scores_df, x="name", y="qwk-multi")
+
+    ax.set_title("QWK After Binning\nn=144")
+    ax.set_xlabel("Model-to-Prompt")
+    ax.set_ylabel("QWK")
+
+    plt.savefig(f"results/spearman-plots/qwk-multi-binning.png")
+    # plt.show()
