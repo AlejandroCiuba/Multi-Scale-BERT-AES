@@ -69,18 +69,15 @@ def fix_score(score, prompt):
     # else:
     #     return score
 
-    # min_score, max_score = asap_ranges[prompt]
+    min_score, max_score = asap_ranges[prompt]
 
-    # if score < min_score:
-    #     score = min_score
-    # elif score > max_score:
-    #     score = max_score
+    norm_score = (score / (60 / max_score)) + min_score
 
-    # norm_score = (score / (60 / max_score)) + min_score
+    print(norm_score, min_score, max_score, score)
 
-    # return norm_score
+    return norm_score
 
-    return score
+    # return score
 
 
 def is_zh(s):
@@ -126,12 +123,14 @@ if __name__ == "__main__":
 
     file = str(sys.argv[1])
 
+    # TODO: CHANGE THIS WHENEVER MAKING A NEW FIX
     # Perform Spearman's Correlation
-    with open(f'results/no-fix/pred-crc-{file}.txt', 'r') as src:
+    with open(f'results/fix1/pred-crc-{file}.txt', 'r') as src:
         y, X = list(zip(*[(float(line.split()[0]), float(line.split()[1])) for line in src]))
 
-    with open(f'results/plots-corr/spearman-{file}.txt', 'w+') as dst:
-        dst.write("Spearman correlation on the untransformed outputs and the gold labels\n")
+    # TODO: CHANGE THIS WHENEVER MAKING A NEW FIX
+    with open(f'results/fix1-plots-corr/spearman-{file}.txt', 'w+') as dst:
+        dst.write("Spearman correlation on the transformed outputs and the gold labels\n")
         dst.write(f"{str(spearmanr(X, y))}\n")
 
     sns.scatterplot(x=X, y=y)
@@ -139,4 +138,5 @@ if __name__ == "__main__":
     plt.ylabel(f"Prompt {file} Gold Labels")
     plt.title(f"Model Output vs. Prompt {file} Gold Labels")
 
-    plt.savefig(f'results/plots-corr/spearman-{file}.png')
+    # TODO: CHANGE THIS WHENEVER MAKING A NEW FIX
+    plt.savefig(f'results/fix1-plots-corr/spearman-{file}.png')
