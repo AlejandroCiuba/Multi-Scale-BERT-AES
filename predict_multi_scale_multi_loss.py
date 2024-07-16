@@ -33,6 +33,7 @@ def _initialize_arguments(p: configargparse.ArgParser):
 
 
 if __name__ == "__main__":
+
     # initialize arguments
     p = configargparse.ArgParser(default_config_files=["init/asap.ini"])
     args = _initialize_arguments(p)
