@@ -25,7 +25,7 @@ def encode_documents(documents: list, tokenizer: BertTokenizer, max_input_length
     Returns
     ---
 
-    The tokenized output as a `Tensor` descrbed above, and a list containing the number of sequences per document.
+    The tokenized output as a `Tensor` descrbed above, and a `Tensor` containing the number of sequences per document.
     """
 
     tokenized_documents = [tokenizer.tokenize(document) for document in documents]
