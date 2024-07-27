@@ -75,9 +75,7 @@ class DocumentBertScoringModel():
         and the following are the chunk representations in ascending order. 
         """
 
-        data = [tensor.to(device=self.args['device']) for tensor in data]
-
-        predictions = torch.empty((data[0].shape[0])).to(device=self.args['device'])
+        predictions = torch.zeros((data[0].shape[0])).to(device=self.args['device'])
 
         # Get the document-level predictions
         word_document_predictions = self.bert_regression_by_word_document(data[0], device=self.args['device'])
@@ -148,38 +146,45 @@ class DocumentBertScoringModel():
 
                 predictions[i:i + self.args['batch_size']] = batch_predictions
 
-            # predictions = torch.empty((document_representations_word_document.shape[0]))
+            print("My Method:")
+            print(predictions)
 
-            # for i in tqdm(range(0, document_representations_word_document.shape[0], self.args['batch_size']), desc="Running model..."):
+        #     predictions = torch.zeros((document_representations_word_document.shape[0]))
 
-            #     batch_document_tensors_word_document = document_representations_word_document[i:i + self.args['batch_size']].to(device=self.args['device'])
+        #     for i in tqdm(range(0, document_representations_word_document.shape[0], self.args['batch_size']), desc="Running model..."):
 
-            #     batch_predictions_word_document = self.bert_regression_by_word_document(batch_document_tensors_word_document, device=self.args['device'])
-            #     batch_predictions_word_document = torch.squeeze(batch_predictions_word_document)
+        #         batch_document_tensors_word_document = document_representations_word_document[i:i + self.args['batch_size']].to(device=self.args['device'])
 
-            #     batch_predictions_word_chunk_sentence_doc = batch_predictions_word_document
+        #         batch_predictions_word_document = self.bert_regression_by_word_document(batch_document_tensors_word_document, device=self.args['device'])
+        #         batch_predictions_word_document = torch.squeeze(batch_predictions_word_document)
 
-            #     for chunk_index in range(len(self.chunk_sizes)):
+        #         batch_predictions_word_chunk_sentence_doc = batch_predictions_word_document
 
-            #         batch_document_tensors_chunk = document_representations_chunk_list[chunk_index][i:i + self.args['batch_size']]. \
-            #             to(device=self.args['device'])
+        #         for chunk_index in range(len(self.chunk_sizes)):
 
-            #         batch_predictions_chunk = self.bert_regression_by_chunk(
-            #             batch_document_tensors_chunk,
-            #             device=self.args['device'],
-            #             bert_batch_size=self.bert_batch_sizes[chunk_index],
-            #             )
+        #             batch_document_tensors_chunk = document_representations_chunk_list[chunk_index][i:i + self.args['batch_size']]. \
+        #                 to(device=self.args['device'])
 
-            #         batch_predictions_chunk = torch.squeeze(batch_predictions_chunk)
-            #         batch_predictions_word_chunk_sentence_doc = torch.add(batch_predictions_word_chunk_sentence_doc, batch_predictions_chunk)
+        #             batch_predictions_chunk = self.bert_regression_by_chunk(
+        #                 batch_document_tensors_chunk,
+        #                 device=self.args['device'],
+        #                 bert_batch_size=self.bert_batch_sizes[chunk_index],
+        #                 )
 
-            #     predictions[i:i + self.args['batch_size']] = batch_predictions_word_chunk_sentence_doc
+        #             batch_predictions_chunk = torch.squeeze(batch_predictions_chunk)
+        #             batch_predictions_word_chunk_sentence_doc = torch.add(batch_predictions_word_chunk_sentence_doc, batch_predictions_chunk)
 
-        assert correct_output.shape == predictions.shape
+        #         predictions[i:i + self.args['batch_size']] = batch_predictions_word_chunk_sentence_doc
+
+        # assert correct_output.shape == predictions.shape
 
         predictions = predictions.cpu().numpy()
         prediction_scores = predictions  # [fix_score(item, self.prompt) for item in predictions]
         correct_output = correct_output.cpu().numpy()
+
+        print("Current Implementation:")
+        print(predictions)
+        print(prediction_scores)
 
         self.to_file(labels=correct_output, predictions=prediction_scores)
         self.evaluate(labels=correct_output, predictions=prediction_scores)
