@@ -69,11 +69,15 @@ class DocumentBertScoringModel():
             config=config,
         )
 
-    def forward(self, data: List[torch.Tensor]) -> torch.Tensor:
+    def forward(self, data: List[torch.Tensor], eval: bool=False) -> torch.Tensor:
         """
         Assumes a list of `torch.Tensor` where the first element is the document-level representation,
         and the following are the chunk representations in ascending order. 
         """
+
+        if eval:
+            self.bert_regression_by_word_document.eval()
+            self.bert_regression_by_chunk.eval()
 
         predictions = torch.zeros((data[0].shape[0])).to(device=self.args['device'])
 
@@ -86,12 +90,12 @@ class DocumentBertScoringModel():
         predictions = torch.add(predictions, word_document_predictions)
 
         # Add the chunk-level predictions
-        for chunk_data, chunk_size in zip(data[1:], self.chunk_sizes):
+        for chunk_data, batch_size in zip(data[1:], self.bert_batch_sizes):
 
             chunk_predictions = self.bert_regression_by_chunk(
                 chunk_data,
                 device=self.args['device'],
-                bert_batch_size=chunk_size,
+                bert_batch_size=batch_size,
             )
 
             chunk_predictions = torch.squeeze(chunk_predictions)
@@ -114,11 +118,11 @@ class DocumentBertScoringModel():
             # Segment-scale at the various chunk sizes passed in asap.ini
             # List of document token tensors and sequence information per chunk size
             document_representations_chunk_list, document_sequence_lengths_chunk_list = [], []
-            for i in range(len(self.chunk_sizes)):
+            for chunk_size in self.chunk_sizes:
 
                 document_representations_chunk, document_sequence_lengths_chunk = encode_documents(data[0],
                                                                                                    self.bert_tokenizer,
-                                                                                                   max_input_length=self.chunk_sizes[i], )
+                                                                                                   max_input_length=chunk_size, )
 
                 document_representations_chunk_list.append(document_representations_chunk)
                 document_sequence_lengths_chunk_list.append(document_sequence_lengths_chunk)
@@ -134,7 +138,7 @@ class DocumentBertScoringModel():
         # For the token-scale and all segment-scale features, simply add them all together
         with torch.no_grad():
 
-            predictions = torch.empty((document_representations_word_document.shape[0]))
+            predictions = torch.zeros((document_representations_word_document.shape[0]))
 
             for i in tqdm(range(0, document_representations_word_document.shape[0], self.args['batch_size']), desc="Running model..."):
 
@@ -142,41 +146,45 @@ class DocumentBertScoringModel():
                 batch_document_representations_chunk_list = [chunk_rep[i:i + self.args['batch_size']]. \
                                                                to(device=self.args['device']) for chunk_rep in document_representations_chunk_list]
 
-                batch_predictions = self.forward([batch_document_tensors_word_document, *batch_document_representations_chunk_list])
+                batch_predictions = self.forward([batch_document_tensors_word_document, *batch_document_representations_chunk_list], eval=True)
 
                 predictions[i:i + self.args['batch_size']] = batch_predictions
 
-            print("My Method:")
+            print(f"My Method [{i}, {i + self.args['batch_size']}]:")
             print(predictions)
 
-        #     predictions = torch.zeros((document_representations_word_document.shape[0]))
+            # predictions = torch.zeros((document_representations_word_document.shape[0]))
 
-        #     for i in tqdm(range(0, document_representations_word_document.shape[0], self.args['batch_size']), desc="Running model..."):
+            # for i in tqdm(range(0, document_representations_word_document.shape[0], self.args['batch_size']), desc="Running model..."):
 
-        #         batch_document_tensors_word_document = document_representations_word_document[i:i + self.args['batch_size']].to(device=self.args['device'])
+            #     batch_document_tensors_word_document = document_representations_word_document[i:i + self.args['batch_size']].to(device=self.args['device'])
 
-        #         batch_predictions_word_document = self.bert_regression_by_word_document(batch_document_tensors_word_document, device=self.args['device'])
-        #         batch_predictions_word_document = torch.squeeze(batch_predictions_word_document)
+            #     batch_predictions_word_document = self.bert_regression_by_word_document(batch_document_tensors_word_document, device=self.args['device'])
+            #     batch_predictions_word_document = torch.squeeze(batch_predictions_word_document)
 
-        #         batch_predictions_word_chunk_sentence_doc = batch_predictions_word_document
+            #     batch_predictions_word_chunk_sentence_doc = batch_predictions_word_document
 
-        #         for chunk_index in range(len(self.chunk_sizes)):
+            #     for chunk_index in range(len(self.chunk_sizes)):
 
-        #             batch_document_tensors_chunk = document_representations_chunk_list[chunk_index][i:i + self.args['batch_size']]. \
-        #                 to(device=self.args['device'])
+            #         batch_document_tensors_chunk = document_representations_chunk_list[chunk_index][i:i + self.args['batch_size']]. \
+            #             to(device=self.args['device'])
 
-        #             batch_predictions_chunk = self.bert_regression_by_chunk(
-        #                 batch_document_tensors_chunk,
-        #                 device=self.args['device'],
-        #                 bert_batch_size=self.bert_batch_sizes[chunk_index],
-        #                 )
+            #         batch_predictions_chunk = self.bert_regression_by_chunk(
+            #             batch_document_tensors_chunk,
+            #             device=self.args['device'],
+            #             bert_batch_size=self.bert_batch_sizes[chunk_index],
+            #             )
 
-        #             batch_predictions_chunk = torch.squeeze(batch_predictions_chunk)
-        #             batch_predictions_word_chunk_sentence_doc = torch.add(batch_predictions_word_chunk_sentence_doc, batch_predictions_chunk)
+            #         batch_predictions_chunk = torch.squeeze(batch_predictions_chunk)
+            #         batch_predictions_word_chunk_sentence_doc = torch.add(batch_predictions_word_chunk_sentence_doc, batch_predictions_chunk)
+            #         break
 
-        #         predictions[i:i + self.args['batch_size']] = batch_predictions_word_chunk_sentence_doc
+            #     predictions[i:i + self.args['batch_size']] = batch_predictions_word_chunk_sentence_doc
 
-        # assert correct_output.shape == predictions.shape
+            # print(f"Theirs [{i}, {i + self.args['batch_size']}]:")
+            # print(predictions)
+
+        assert correct_output.shape == predictions.shape
 
         predictions = predictions.cpu().numpy()
         prediction_scores = predictions  # [fix_score(item, self.prompt) for item in predictions]
