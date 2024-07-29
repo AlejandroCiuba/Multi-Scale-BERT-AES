@@ -118,6 +118,7 @@ class DocumentBertScoringModel():
             # Segment-scale at the various chunk sizes passed in asap.ini
             # List of document token tensors and sequence information per chunk size
             document_representations_chunk_list, document_sequence_lengths_chunk_list = [], []
+
             for chunk_size in self.chunk_sizes:
 
                 document_representations_chunk, document_sequence_lengths_chunk = encode_documents(data[0],
@@ -150,8 +151,8 @@ class DocumentBertScoringModel():
 
                 predictions[i:i + self.args['batch_size']] = batch_predictions
 
-            print(f"My Method [{i}, {i + self.args['batch_size']}]:")
-            print(predictions)
+            # print(f"My Method [{i}, {i + self.args['batch_size']}]:")
+            # print(predictions)
 
             # predictions = torch.zeros((document_representations_word_document.shape[0]))
 
@@ -199,7 +200,7 @@ class DocumentBertScoringModel():
 
     def to_file(self, labels: List[Union[int, float]], predictions: List[float]):
 
-        with open(os.path.join(self.args['model_directory'], self.args['result_file']), "w") as outfile:
+        with open(self.args['result_file'], "w") as outfile:
 
             for pred, label in zip(predictions, labels):
 
