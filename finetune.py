@@ -17,9 +17,8 @@ import torch
 import pandas as pd
 
 
-def load_dataset(data: Path, batch_size: int,
-                 prompt: int, chunk_sizes,
-                 tokenizer: BertTokenizer) -> DataLoader:
+def load_dataset(data: Path, prompt: int,
+                 chunk_sizes, tokenizer: BertTokenizer) -> DataLoader:
 
     df = pd.read_csv(data, index_col=0)
     df['split'] = df['split'].astype(int)
@@ -34,7 +33,7 @@ def load_dataset(data: Path, batch_size: int,
                             chunk_sizes=chunk_sizes),
     )
 
-    return DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True, num_workers=4)
+    return dataset
 
 
 def main(args: argparse.Namespace):
@@ -45,13 +44,11 @@ def main(args: argparse.Namespace):
     arch_model = DocumentBertScoringModel(args=args)
     dataloader = load_dataset(
         data=args.data,
-        batch_size=args.batch_size,
         prompt=args.prompt,
         chunk_sizes=arch_model.chunk_sizes,
         tokenizer=arch_model.bert_tokenizer,
     )
 
-    print(iter(dataloader).__next__())
 
 def add_args(parser: argparse.ArgumentParser):
 

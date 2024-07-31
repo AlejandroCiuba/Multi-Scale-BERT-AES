@@ -21,7 +21,8 @@ class ToEncoded():
 
     def __call__(self, sample):
 
-        X, y = sample[0], sample[1]
+        X, y = sample
+        print(y)
 
         X_word_level, _ = encode_documents([X], self.tokenizer, max_input_length=512)
         X_reps = [X_word_level]
