@@ -191,10 +191,6 @@ class DocumentBertScoringModel():
         prediction_scores = predictions  # [fix_score(item, self.prompt) for item in predictions]
         correct_output = correct_output.cpu().numpy()
 
-        print("Current Implementation:")
-        print(predictions)
-        print(prediction_scores)
-
         self.to_file(labels=correct_output, predictions=prediction_scores)
         self.evaluate(labels=correct_output, predictions=prediction_scores)
 

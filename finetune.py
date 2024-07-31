@@ -4,11 +4,12 @@
 # Ask if we should retrain/train from scratch/finetune
 # Ask about how to train/finetune through HuggingFace
 from ASAPDataset import (ASAPDataset,
+                         ASAPLoss,
                          ToEncoded, )
 from model_architechure_bert_multi_scale_multi_loss import DocumentBertScoringModel
 from pathlib import Path
-from torch.utils.data import (DataLoader,
-                              Dataset, )
+from torch.utils.data import Dataset
+from tqdm import tqdm
 from transformers import BertTokenizer
 
 import argparse
@@ -18,7 +19,7 @@ import pandas as pd
 
 
 def load_dataset(data: Path, prompt: int,
-                 chunk_sizes, tokenizer: BertTokenizer) -> DataLoader:
+                 chunk_sizes, tokenizer: BertTokenizer) -> Dataset:
 
     df = pd.read_csv(data, index_col=0)
     df['split'] = df['split'].astype(int)
@@ -42,12 +43,25 @@ def main(args: argparse.Namespace):
     args.prompt = args.prompt * 2
 
     arch_model = DocumentBertScoringModel(args=args)
-    dataloader = load_dataset(
+    dataset = load_dataset(
         data=args.data,
         prompt=args.prompt,
         chunk_sizes=arch_model.chunk_sizes,
         tokenizer=arch_model.bert_tokenizer,
     )
+
+    loss = ASAPLoss(dim=0)
+
+    print("Training Set Size:", len(dataset))
+    batches_per_epoch = (len(dataset) // args.batch_size) + 1
+
+    for epoch in tqdm(range(args.epochs)):
+
+        for i in range(0, len(dataset), args.batch_size):
+
+            X, y = dataset[i: i + (args.batch_size)]  # List of 5 lists containing 32 Tensors each, 32 scores
+
+            print(f"{i}/{batches_per_epoch}: {loss(y, y):0.5f}")
 
 
 def add_args(parser: argparse.ArgumentParser):

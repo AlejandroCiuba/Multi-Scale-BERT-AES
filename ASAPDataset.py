@@ -1,12 +1,41 @@
 # ASAP Dataset Dataset
 # Created by Alejandro Ciuba, alc307@pitt.edu
 from encoder import encode_documents
+from torch.nn import (CosineSimilarity,
+                      MarginRankingLoss,
+                      MSELoss, )
 from torch.utils.data import Dataset
 
 import torch
 
 import numpy as np
 import pandas as pd
+
+
+class ASAPLoss():
+
+    mseloss, cosinesimloss, marginrankingloss = None, None, None
+    alpha, beta, gamma = 0.0, 0.0, 0.0
+
+    def __init__(self, alpha: float = 0.5, 
+                 beta: float = 0.5, gamma: float = 0.5,
+                 dim: int = 1, margin: float = 0.0):
+
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+
+        self.mseloss = MSELoss()
+        self.cosinesimloss = CosineSimilarity(dim=dim)
+        self.marginrankingloss = MarginRankingLoss(margin=margin)
+
+    # TODO: Fix self.marginrankingloss to enumerate all pairs of predictions and targets,
+    # And generate all margin ranking coefficients according to the paper.
+    def __call__(self, predictions: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+
+        return self.alpha * self.mseloss(predictions, targets) \
+        + self.beta * self.cosinesimloss(predictions, targets) \
+        + self.gamma * self.marginrankingloss(predictions, targets)
 
 
 class ToEncoded():
@@ -22,14 +51,13 @@ class ToEncoded():
     def __call__(self, sample):
 
         X, y = sample
-        print(y)
 
-        X_word_level, _ = encode_documents([X], self.tokenizer, max_input_length=512)
+        X_word_level, _ = encode_documents([X] if not isinstance(X, list) else X, self.tokenizer, max_input_length=512)
         X_reps = [X_word_level]
 
         for chunk_size in self.chunk_sizes:
 
-            doc_rep, _ = encode_documents([X], self.tokenizer, max_input_length=chunk_size)
+            doc_rep, _ = encode_documents([X] if not isinstance(X, list) else X, self.tokenizer, max_input_length=chunk_size)
             X_reps.append(doc_rep)
 
         return X_reps, y
