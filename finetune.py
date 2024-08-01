@@ -8,6 +8,7 @@ from ASAPDataset import (ASAPDataset,
                          ToEncoded, )
 from model_architechure_bert_multi_scale_multi_loss import DocumentBertScoringModel
 from pathlib import Path
+from torch import optim
 from torch.utils.data import Dataset
 from tqdm import tqdm
 from transformers import BertTokenizer
@@ -42,26 +43,40 @@ def main(args: argparse.Namespace):
     # Have to do this because of how DocumentBertScoringModel parses the args
     args.prompt = args.prompt * 2
 
-    arch_model = DocumentBertScoringModel(args=args)
+    model = DocumentBertScoringModel(args=args)
     dataset = load_dataset(
         data=args.data,
         prompt=args.prompt,
-        chunk_sizes=arch_model.chunk_sizes,
-        tokenizer=arch_model.bert_tokenizer,
+        chunk_sizes=model.chunk_sizes,
+        tokenizer=model.bert_tokenizer,
     )
 
-    loss = ASAPLoss(dim=0)
+    model.to(args.device)
+
+    optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
+    criterion = ASAPLoss(dim=0)
 
     print("Training Set Size:", len(dataset))
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
     for epoch in tqdm(range(args.epochs)):
 
-        for i in range(0, len(dataset), args.batch_size):
+        for i, _ in enumerate(range(0, len(dataset), args.batch_size)):
+
+            optimizer.zero_grad()
 
             X, y = dataset[i: i + (args.batch_size)]  # List of 5 lists containing 32 Tensors each, 32 scores
+            X, y = [x.to(args.device) for x in X], y.to(args.device)
 
-            print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss(y, y):0.5f}")
+            predictionss = model(X)
+            loss = criterion(predictions=predictionss, targets=y)
+
+            loss.backward()
+            optimizer.step()
+
+            print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss:0.5f}")
+
+        exit()
 
 
 def add_args(parser: argparse.ArgumentParser):
@@ -112,6 +127,14 @@ def add_args(parser: argparse.ArgumentParser):
         "--epochs",
         type=int,
         default=1,
+        help="Number of epochs to finetune the model.\n \n",
+    )
+
+    parser.add_argument(
+        "-l",
+        "--learning_rate",
+        type=float,
+        default=6e-5,
         help="Number of epochs to finetune the model.\n \n",
     )
 

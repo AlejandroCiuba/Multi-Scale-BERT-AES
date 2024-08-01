@@ -15,10 +15,14 @@ from typing import (List,
 import os
 import torch
 
+import torch.nn as nn
 
-class DocumentBertScoringModel():
+
+class DocumentBertScoringModel(nn.Module):
 
     def __init__(self, args=None):
+
+        super().__init__()
 
         if args is not None:
             self.args = vars(args)
