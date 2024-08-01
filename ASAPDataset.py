@@ -33,9 +33,17 @@ class ASAPLoss():
     # And generate all margin ranking coefficients according to the paper.
     def __call__(self, predictions: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
 
+        # Get all pairwise combinations for the MarginRankingLoss function
+        pred_combos = torch.combinations(predictions, r=2)
+        target_combos = torch.combinations(targets, r=2)
+
+        # This won't work since there are 3 conditions
+        # But I think iterating through the Tensor will increase runtime
+        r = torch.where(target_combos[:, 0] > target_combos[:,], 1, -1)
+
         return self.alpha * self.mseloss(predictions, targets) \
         + self.beta * self.cosinesimloss(predictions, targets) \
-        + self.gamma * self.marginrankingloss(predictions, targets)
+        + self.gamma * self.marginrankingloss(predictions, targets)  # This still needs the r vector
 
 
 class ToEncoded():

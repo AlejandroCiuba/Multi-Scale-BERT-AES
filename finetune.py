@@ -61,7 +61,7 @@ def main(args: argparse.Namespace):
 
             X, y = dataset[i: i + (args.batch_size)]  # List of 5 lists containing 32 Tensors each, 32 scores
 
-            print(f"{i}/{batches_per_epoch}: {loss(y, y):0.5f}")
+            print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss(y, y):0.5f}")
 
 
 def add_args(parser: argparse.ArgumentParser):
