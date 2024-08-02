@@ -29,8 +29,6 @@ class ASAPLoss():
         self.cosinesimloss = CosineSimilarity(dim=dim)
         self.marginrankingloss = MarginRankingLoss(margin=margin)
 
-    # TODO: Fix self.marginrankingloss to enumerate all pairs of predictions and targets,
-    # And generate all margin ranking coefficients according to the paper.
     def __call__(self, predictions: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
 
         # Get all pairwise combinations for the MarginRankingLoss function
