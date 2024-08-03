@@ -199,13 +199,8 @@ class DocumentBertScoringModel(nn.Module):
         self.evaluate(labels=correct_output, predictions=prediction_scores)
 
     def to_file(self, labels: List[Union[int, float]], predictions: List[float]):
-
         with open(self.args['result_file'], "w") as outfile:
-
             for pred, label in zip(predictions, labels):
-
-                # prediction_scores.append(fix_score(item, self.prompt))
-                # label_scores.append(correct_output[index])
                 outfile.write("%f\t%f\n" % (label, pred))
 
     def evaluate(self, labels: List[Union[int, float]], predictions: List[float]):

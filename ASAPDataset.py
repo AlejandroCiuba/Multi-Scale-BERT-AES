@@ -41,7 +41,6 @@ class ASAPLoss():
         + self.beta * (1 - self.cosinesimloss(predictions, targets)) \
         + self.gamma * (torch.sum(self.marginrankingloss(p1, p2, r)) / p1.shape[0])
 
-
 class ToEncoded():
 
     tokenizer = None
@@ -87,9 +86,9 @@ class ASAPDataset(Dataset):
         valid = data[(data.split == valid_split) & (data.essay_set == prompt)]
         test = data[(data.split == test_split) & (data.essay_set == prompt)]
 
-        self.X_train, self.y_train = train.essay.to_list(), torch.from_numpy(train.score.to_numpy())
-        self.X_valid, self.y_valid = valid.essay.to_list(), torch.from_numpy(valid.score.to_numpy())
-        self.X_test, self.y_test = test.essay.to_list(), torch.from_numpy(test.score.to_numpy())
+        self.X_train, self.y_train = train.essay.to_list(), torch.from_numpy(train.score.to_numpy()).type(dtype=torch.float32)
+        self.X_valid, self.y_valid = valid.essay.to_list(), torch.from_numpy(valid.score.to_numpy()).type(dtype=torch.float32)
+        self.X_test, self.y_test = test.essay.to_list(), torch.from_numpy(test.score.to_numpy()).type(dtype=torch.float32)
 
     def __getitem__(self, index: int):
 

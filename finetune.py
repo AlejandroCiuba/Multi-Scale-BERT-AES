@@ -11,7 +11,9 @@ from pathlib import Path
 from torch import optim
 from torch.utils.data import Dataset
 from tqdm import tqdm
-from transformers import BertTokenizer
+from transformers import (BertConfig,
+                          BertPreTrainedModel,
+                          BertTokenizer, )
 
 import argparse
 import torch
@@ -20,10 +22,14 @@ import pandas as pd
 
 
 def load_dataset(data: Path, prompt: int,
-                 chunk_sizes, tokenizer: BertTokenizer) -> Dataset:
+                 chunk_sizes, tokenizer: BertTokenizer,
+                 sample: int = -1, seed: int = 42) -> ASAPDataset:
 
     df = pd.read_csv(data, index_col=0)
     df['split'] = df['split'].astype(int)
+
+    if sample > 0:
+        df = df[(df.split == 1) & (df.essay_set == prompt[0])].sample(n=sample, random_state=seed)
 
     dataset = ASAPDataset(
         data=df,
@@ -49,6 +55,7 @@ def main(args: argparse.Namespace):
         prompt=args.prompt,
         chunk_sizes=model.chunk_sizes,
         tokenizer=model.bert_tokenizer,
+        sample=args.sample,
     )
 
     model.to(args.device)
@@ -65,18 +72,22 @@ def main(args: argparse.Namespace):
 
             optimizer.zero_grad()
 
-            X, y = dataset[i: i + (args.batch_size)]  # List of 5 lists containing 32 Tensors each, 32 scores
+            X, y = dataset[i: i + (args.batch_size)]  # List of 5 lists containing args.batch_size Tensors each, args.batch_size scores
             X, y = [x.to(args.device) for x in X], y.to(args.device)
 
-            predictionss = model(X)
-            loss = criterion(predictions=predictionss, targets=y)
+            predictions = model(X)
+            loss = criterion(predictions=predictions, targets=y)
 
             loss.backward()
             optimizer.step()
 
             print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss:0.5f}")
 
-        exit()
+    print("Performing evaluation on the test set")
+
+    model.predict_for_regress(data=dataset.get_test())
+
+    # BertConfig.save_pretrained(save_directory=args.save_model)
 
 
 def add_args(parser: argparse.ArgumentParser):
@@ -131,11 +142,19 @@ def add_args(parser: argparse.ArgumentParser):
     )
 
     parser.add_argument(
+        "-x",
+        "--sample",
+        type=int,
+        default=-1,
+        help="Sample of datapoints to use; good for testing.\n \n",
+    )
+
+    parser.add_argument(
         "-l",
         "--learning_rate",
         type=float,
         default=6e-5,
-        help="Number of epochs to finetune the model.\n \n",
+        help="Learning rate for the entire model.\n \n",
     )
 
     parser.add_argument(
@@ -144,6 +163,14 @@ def add_args(parser: argparse.ArgumentParser):
         type=str,
         default=".",
         help="file to store the final results in.\n \n",
+    )
+
+    parser.add_argument(
+        "-s",
+        "--save_model",
+        type=str,
+        required=True,
+        help="Directory to save the model to.\n \n",
     )
 
     parser.add_argument(
