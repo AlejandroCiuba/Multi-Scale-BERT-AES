@@ -103,37 +103,13 @@ class ASAPDataset(Dataset):
     def get_valid(self, transform: bool = True):
 
         if self.transform is not None and transform:
-
-            X_trans, y_trans = [None for _ in range(5)], []
-            for X, y in zip(self.X_valid, self.y_valid):
-
-                X, y = self.transform((X, y))
-
-                for i, x in enumerate(X):
-
-                    if X_trans[i] is None:
-                        X_trans[i] = x
-                    else:
-                        print(X_trans[i].shape, x.shape)
-                        X_trans[i] = torch.cat((X_trans[i], x))
-
-                y_trans.append(y.item())
-
-            return X_trans, torch.tensor(y_trans).to(dtype=torch.float32)
+            return self.transform((self.X_valid, self.y_valid))
 
         return self.X_valid, self.y_valid
 
     def get_test(self, transform: bool = True):
 
-
         if self.transform is not None and transform:
-
-            X_trans, y_trans = [], []
-            for X, y in (self.transform((X, y)) for X, y in zip(self.X_test, self.y_test)):
-
-                    X_trans.append(X)
-                    y_trans.append(y)
-
-            return X_trans, y_trans
+            return self.transform((self.X_test, self.y_test))
 
         return self.X_test, self.y_test

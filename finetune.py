@@ -50,8 +50,6 @@ def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: AS
         X, y = dataset.get_valid(transform=True)
         X, y = [x.to(args.device) for x in X], y.to(args.device, dtype=torch.float32)
 
-        for x in X:
-            print(x.shape)
         predictions = model(X)
         loss = criterion(predictions=predictions, targets=y)
 
@@ -81,9 +79,6 @@ def main(args: argparse.Namespace):
     print("Training Set Size:", len(dataset))
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
-    evaluate(model, dataset, criterion)
-    exit()
-
     print("Started training loop")
     for epoch in tqdm(range(args.epochs)):
 
@@ -100,7 +95,7 @@ def main(args: argparse.Namespace):
             loss.backward()
             optimizer.step()
 
-            print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss:0.5f}")
+            print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
             break
         
         eval_loss = evaluate(model=model, dataset=dataset, criterion=criterion)
