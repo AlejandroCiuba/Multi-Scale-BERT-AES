@@ -57,7 +57,18 @@ def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: AS
 
         return loss.item()
 
+
+def save_model(model:DocumentBertScoringModel, save_path: str, name: str):
+
+    BertConfig.save_pretrained(model.config, save_directory=save_path)
+
+    torch.save(model.bert_regression_by_word_document, save_path + f"/word_document/{name}")
+    torch.save(model.bert_regression_by_word_document, save_path + f"/chunk/{name}")
+
+
 def main(args: argparse.Namespace):
+
+    print(f"===================== FINE-TUNING ON PROMPT {args.prompt[0]} =====================")
 
     # Have to do this because of how DocumentBertScoringModel parses the args
     args.prompt = args.prompt * 2
@@ -76,11 +87,19 @@ def main(args: argparse.Namespace):
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
     criterion = ASAPLoss(dim=0)
 
-    print("Training Set Size:", len(dataset))
+    name = args.save_model.split("/")[-1]
+    path = args.save_model[:len(args.save_model) - name]
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
-    print("Started training loop")
+    print("Training Set Size:", len(dataset))
+    print(f"Started training loop for {name}")
+
+    prev_best = 1_000_000
     for epoch in tqdm(range(args.epochs)):
+
+        model.train()
+        model.bert_regression_by_word_document.train()
+        model.bert_regression_by_chunk.train()
 
         for i, _ in enumerate(range(0, len(dataset), args.batch_size)):
 
@@ -96,21 +115,19 @@ def main(args: argparse.Namespace):
             optimizer.step()
 
             print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
-            break
         
         eval_loss = evaluate(model=model, dataset=dataset, criterion=criterion)
         print(f"Evaluation loss at epoch {epoch}: {eval_loss:.5f}")
 
-    print("Performing evaluation on the test set")
+        if eval_loss < prev_best:
 
+            print(f"Saving model {name} on epoch {epoch} ({eval_loss:.5f} is the new best loss!)")
+            save_model(model=model, save_path=path, name=name)
+
+    print("Performing evaluation on the test set")
     model.predict_for_regress(data=dataset.get_test(transform=False))  # The predict_for_regress function transforms the data
 
-    print("Saving the model")
-
-    BertConfig.save_pretrained(model.config, save_directory=args.save_model)
-
-    torch.save(model.bert_regression_by_word_document, args.save_model + "/word_document")
-    torch.save(model.bert_regression_by_word_document, args.save_model + "/chunk")
+    print(f"Fine-tuning complete on prompt {args.prompt[0]}")
 
 
 def add_args(parser: argparse.ArgumentParser):
