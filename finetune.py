@@ -44,6 +44,21 @@ def load_dataset(data: Path, prompt: int,
     return dataset
 
 
+@torch.no_grad()
+def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: ASAPLoss) -> float:
+
+        X, y = dataset.get_valid(transform=True)
+        X, y = [x.to(args.device) for x in X], y.to(args.device, dtype=torch.float32)
+
+        for x in X:
+            print(x.shape)
+        predictions = model(X)
+        loss = criterion(predictions=predictions, targets=y)
+
+        model.predict_for_regress(data=dataset.get_valid(transform=False))
+
+        return loss.item()
+
 def main(args: argparse.Namespace):
 
     # Have to do this because of how DocumentBertScoringModel parses the args
@@ -66,13 +81,17 @@ def main(args: argparse.Namespace):
     print("Training Set Size:", len(dataset))
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
+    evaluate(model, dataset, criterion)
+    exit()
+
+    print("Started training loop")
     for epoch in tqdm(range(args.epochs)):
 
         for i, _ in enumerate(range(0, len(dataset), args.batch_size)):
 
             optimizer.zero_grad()
 
-            X, y = dataset[i: i + (args.batch_size)]  # List of 5 lists containing args.batch_size Tensors each, args.batch_size scores
+            X, y = dataset[i: i + (args.batch_size)]  # List of 5 tensors containing args.batch_size Tensors each, args.batch_size scores
             X, y = [x.to(args.device) for x in X], y.to(args.device)
 
             predictions = model(X)
@@ -82,12 +101,21 @@ def main(args: argparse.Namespace):
             optimizer.step()
 
             print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss:0.5f}")
+            break
+        
+        eval_loss = evaluate(model=model, dataset=dataset, criterion=criterion)
+        print(f"Evaluation loss at epoch {epoch}: {eval_loss:.5f}")
 
     print("Performing evaluation on the test set")
 
-    model.predict_for_regress(data=dataset.get_test())
+    model.predict_for_regress(data=dataset.get_test(transform=False))  # The predict_for_regress function transforms the data
 
-    # BertConfig.save_pretrained(save_directory=args.save_model)
+    print("Saving the model")
+
+    BertConfig.save_pretrained(model.config, save_directory=args.save_model)
+
+    torch.save(model.bert_regression_by_word_document, args.save_model + "/word_document")
+    torch.save(model.bert_regression_by_word_document, args.save_model + "/chunk")
 
 
 def add_args(parser: argparse.ArgumentParser):
@@ -170,7 +198,7 @@ def add_args(parser: argparse.ArgumentParser):
         "--save_model",
         type=str,
         required=True,
-        help="Directory to save the model to.\n \n",
+        help="Directory and file to save the model to.\n \n",
     )
 
     parser.add_argument(
