@@ -18,7 +18,7 @@ class ASAPLoss():
     alpha, beta, gamma = 0.0, 0.0, 0.0
     device = None
 
-    def __init__(self, alpha: float = 0.5, 
+    def __init__(self, alpha: float = 0.5,
                  beta: float = 0.5, gamma: float = 0.5,
                  dim: int = 1, margin: float = 0.0,
                  device: str = "cuda"):
@@ -78,9 +78,9 @@ class ASAPDataset(Dataset):
 
     transform = None
 
-    def __init__(self, data: pd.DataFrame, train_splits, valid_split, 
+    def __init__(self, data: pd.DataFrame, train_splits, valid_split,
                  test_split, prompt: int, transform = None):
-        
+
         super().__init__()
 
         if transform is not None:

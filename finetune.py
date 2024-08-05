@@ -130,7 +130,7 @@ def main(args: argparse.Namespace):
 
             print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
             loss_tracker.append(loss.item())
-        
+
         eval_loss = evaluate(model=model, dataset=dataset, criterion=criterion)
         print(f"Evaluation loss at epoch {epoch}: {eval_loss:.5f}")
 
