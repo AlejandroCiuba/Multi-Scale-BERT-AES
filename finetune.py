@@ -49,6 +49,10 @@ def load_dataset(data: Path, prompt: int,
 @torch.no_grad()
 def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: ASAPLoss) -> float:
 
+        model.eval()
+        model.bert_regression_by_word_document.eval()
+        model.bert_regression_by_chunk.eval()
+
         X, y = dataset.get_valid(transform=True)
         X, y = [x.to(args.device) for x in X], y.to(args.device, dtype=torch.float32)
 
@@ -135,10 +139,12 @@ def main(args: argparse.Namespace):
             print(f"Saving model {name} on epoch {epoch} ({eval_loss:.5f} is the new best loss!)")
             save_model(model=model, save_path=path, name=name)
 
+            prev_best = eval_loss
+
     print("Performing evaluation on the test set")
     model.predict_for_regress(data=dataset.get_test(transform=False))  # The predict_for_regress function transforms the data
 
-    print("Losses:", ', '.join(loss_tracker))
+    print("Losses:", ', '.join([str(l) for l in loss_tracker]))
     print(f"Fine-tuning complete on prompt {args.prompt[0]}")
 
 
