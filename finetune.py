@@ -64,7 +64,7 @@ def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: AS
         return loss.item()
 
 
-def save_model(model:DocumentBertScoringModel, save_path: str, name: str):
+def save_model(model:DocumentBertScoringModel, save_path: str, name: str, epoch: int):
 
     BertConfig.save_pretrained(model.config, save_directory=save_path)
 
@@ -72,8 +72,10 @@ def save_model(model:DocumentBertScoringModel, save_path: str, name: str):
     os.makedirs(chunk_save_path, exist_ok=True)
     os.makedirs(word_save_path, exist_ok=True)
 
-    torch.save(model.bert_regression_by_chunk.state_dict(), chunk_save_path + f"/{name}")
-    torch.save(model.bert_regression_by_word_document.state_dict(), word_save_path + f"/{name}")
+    # NOTE: The finetuned model p8_3 does not mean it is the 3rd epoch's model
+    # I am unsure what the "_3" originally means
+    torch.save(model.bert_regression_by_chunk.state_dict(), chunk_save_path + f"/{name}_{epoch}")
+    torch.save(model.bert_regression_by_word_document.state_dict(), word_save_path + f"/{name}_{epoch}")
 
 
 def main(args: argparse.Namespace):
@@ -137,7 +139,7 @@ def main(args: argparse.Namespace):
         if eval_loss < prev_best:
 
             print(f"Saving model {name} on epoch {epoch} ({eval_loss:.5f} is the new best loss!)")
-            save_model(model=model, save_path=path, name=name)
+            save_model(model=model, save_path=path, name=name, epoch=epoch)
 
             prev_best = eval_loss
 
