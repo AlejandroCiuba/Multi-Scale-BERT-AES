@@ -16,10 +16,12 @@ class ASAPLoss():
 
     mseloss, cosinesimloss, marginrankingloss = None, None, None
     alpha, beta, gamma = 0.0, 0.0, 0.0
+    device = None
 
     def __init__(self, alpha: float = 0.5, 
                  beta: float = 0.5, gamma: float = 0.5,
-                 dim: int = 1, margin: float = 0.0):
+                 dim: int = 1, margin: float = 0.0,
+                 device: str = "cuda"):
 
         self.alpha = alpha
         self.beta = beta
@@ -29,13 +31,15 @@ class ASAPLoss():
         self.cosinesimloss = CosineSimilarity(dim=dim)
         self.marginrankingloss = MarginRankingLoss(margin=margin)
 
+        self.device = device
+
     def __call__(self, predictions: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
 
         # Get all pairwise combinations for the MarginRankingLoss function
         p1, p2 = torch.tensor_split(torch.combinations(predictions, r=2), 2, dim=-1)
         t1, t2 = torch.tensor_split(torch.combinations(targets, r=2), 2, dim=-1)
 
-        r = torch.where(t1 > t2, torch.ones(1), torch.where(t1 == t2, -1 * (p1 - p2), torch.tensor([-1])))
+        r = torch.where(t1 > t2, torch.ones(1, device=self.device), torch.where(t1 == t2, -1 * (p1 - p2), torch.tensor([-1],device=self.device)))
 
         return self.alpha * self.mseloss(predictions, targets) \
         + self.beta * (1 - self.cosinesimloss(predictions, targets)) \

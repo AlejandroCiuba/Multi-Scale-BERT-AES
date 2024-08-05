@@ -16,9 +16,11 @@ from transformers import (BertConfig,
                           BertTokenizer, )
 
 import argparse
+import os
 import torch
 
 import pandas as pd
+import torch.nn as nn
 
 
 def load_dataset(data: Path, prompt: int,
@@ -62,8 +64,12 @@ def save_model(model:DocumentBertScoringModel, save_path: str, name: str):
 
     BertConfig.save_pretrained(model.config, save_directory=save_path)
 
-    torch.save(model.bert_regression_by_word_document, save_path + f"/word_document/{name}")
-    torch.save(model.bert_regression_by_word_document, save_path + f"/chunk/{name}")
+    chunk_save_path, word_save_path = save_path + f"chunk", save_path + f"word_document"
+    os.makedirs(chunk_save_path, exist_ok=True)
+    os.makedirs(word_save_path, exist_ok=True)
+
+    torch.save(model.bert_regression_by_chunk.state_dict(), chunk_save_path + f"/{name}")
+    torch.save(model.bert_regression_by_word_document.state_dict(), word_save_path + f"/{name}")
 
 
 def main(args: argparse.Namespace):
@@ -82,19 +88,23 @@ def main(args: argparse.Namespace):
         sample=args.sample,
     )
 
+    model.bert_regression_by_word_document = nn.DataParallel(model.bert_regression_by_word_document)
+    model.bert_regression_by_chunk = nn.DataParallel(model.bert_regression_by_chunk)
     model.to(args.device)
 
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
-    criterion = ASAPLoss(dim=0)
+    criterion = ASAPLoss(dim=0, device=args.device)
 
     name = args.save_model.split("/")[-1]
-    path = args.save_model[:len(args.save_model) - name]
+    path = args.save_model[:len(args.save_model) - len(name)]
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
     print("Training Set Size:", len(dataset))
     print(f"Started training loop for {name}")
 
     prev_best = 1_000_000
+    loss_tracker = []
+
     for epoch in tqdm(range(args.epochs)):
 
         model.train()
@@ -115,6 +125,7 @@ def main(args: argparse.Namespace):
             optimizer.step()
 
             print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
+            loss_tracker.append(loss.item())
         
         eval_loss = evaluate(model=model, dataset=dataset, criterion=criterion)
         print(f"Evaluation loss at epoch {epoch}: {eval_loss:.5f}")
@@ -127,6 +138,7 @@ def main(args: argparse.Namespace):
     print("Performing evaluation on the test set")
     model.predict_for_regress(data=dataset.get_test(transform=False))  # The predict_for_regress function transforms the data
 
+    print("Losses:", ', '.join(loss_tracker))
     print(f"Fine-tuning complete on prompt {args.prompt[0]}")
 
 
@@ -153,7 +165,7 @@ def add_args(parser: argparse.ArgumentParser):
         "--chunk_sizes",
         type=str,
         default="90_30_130_10",
-        help="Chunk sizes for the segmented model.\n \n",
+        help="Chunk sizes for the segmented model; typed this way due to legacy code.\n \n",
     )
 
     parser.add_argument(
