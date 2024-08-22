@@ -68,6 +68,9 @@ def main():
     plot(after_df, "Pearson","Pearson per Prompt after Finetuning", "pearson-after")
     plot(after_df, "QWK", "QWK per Prompt after Finetuning", "qwk-after")
 
+    print(after_df.Pearson.mean())
+    print(after_df.QWK.mean())
+
     for prompt, loss in after_losses:
         plt.plot(loss)
         plt.title(label=f"{prompt} Loss")
