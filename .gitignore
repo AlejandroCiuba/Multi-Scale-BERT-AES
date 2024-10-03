@@ -4,7 +4,7 @@ init/
 output/
 crc*
 
-feedback/feedback_analysis.ipynb
+feedback/*.ipynb
 feedback/data
 
 local_*
