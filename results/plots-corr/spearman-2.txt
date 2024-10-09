@@ -1,2 +1,0 @@
-Spearman correlation on the untransformed outputs and the gold labels
-SpearmanrResult(correlation=0.6722132209711904, pvalue=2.8486415345542734e-20)

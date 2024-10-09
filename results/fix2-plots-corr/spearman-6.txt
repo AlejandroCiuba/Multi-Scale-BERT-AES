@@ -1,2 +1,0 @@
-Spearman correlation on the transformed outputs and the gold labels
-SignificanceResult(statistic=0.5567852888740165, pvalue=4.272812930005471e-13)

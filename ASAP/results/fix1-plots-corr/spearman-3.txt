@@ -1,0 +1,2 @@
+Spearman correlation on the transformed outputs and the gold labels
+SpearmanrResult(correlation=0.6973844824092968, pvalue=2.729607386845881e-22)
