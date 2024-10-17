@@ -7,5 +7,7 @@ crc*
 feedback/
 ELLIPSE/errors
 ELLIPSE/output
+ELLIPSE/debug
+ELLIPSE/logs
 
 local_*

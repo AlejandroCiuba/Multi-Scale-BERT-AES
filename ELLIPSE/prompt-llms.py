@@ -9,13 +9,21 @@ from vllm import (LLM,
 
 import argparse
 import logger
+import logging
 
 import pandas as pd
 
 
 def main(args: argparse.Namespace):
 
-    log, err = logger.make_logger(*args.logging)
+    log, debug, err = logger.make_loggers(
+        *args.logging, 
+        levels=[logging.INFO,
+                logging.DEBUG,
+                logging.WARNING],
+        )
+    
+    print(log, debug, err)
 
     test_df = pd.read_csv(args.data[0])
     rubric = make_rubric(args.data[1])
@@ -29,7 +37,7 @@ def main(args: argparse.Namespace):
         model_suffix="",
         )
     
-    log.info(f"{prompt}")
+    debug.debug(f"=====================PROMPT EXAMPLE=====================\n{prompt.format()}")
 
     llm = LLM(model=args.models[0])
     sampling_params = SamplingParams(temperature=0.01, max_tokens=4096)  # As in Joey's eval.py
@@ -49,7 +57,7 @@ def add_args(parser: argparse.ArgumentParser):
         "-d",
         "--data",
         type=Path,
-        nargs="2",
+        nargs=2,
         required=True,
         help="Data paths leading to the CSV data and then the JSON rubric.\n \n",
     )
@@ -67,16 +75,16 @@ def add_args(parser: argparse.ArgumentParser):
         "-l",
         "--logging",
         type=Path,
-        nargs="2",
+        nargs=3,
         required=True,
-        help="Paths to the logger and error logger.\n \n",
+        help="Paths to the main logger, debug logger and error logger.\n \n",
     )
 
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
-        prog="linear_fitter.py",
+        prog="prompts-llms.py",
         formatter_class=argparse.RawTextHelpFormatter,
         description="Run prompt-based LLMs via vllm.",
         epilog="Created by Alejandro Ciuba, alc307@pitt.edu",

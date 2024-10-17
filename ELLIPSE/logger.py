@@ -6,34 +6,27 @@ import logging
 
 StrPath = str | Path
 
-def make_logger(logpath: StrPath, errpath: StrPath, **kwargs) \
-    -> tuple[logging.LoggerAdapter, logging.LoggerAdapter]:
+def make_loggers(*args: StrPath, levels: list[int] | int) \
+    -> tuple[logging.Logger]:
+
+    def make_logger(path, level, i) -> logging.Logger:
+
+        logger = logging.getLogger(f"log-{i}")
+        logger.setLevel(level)
+
+        handler = logging.FileHandler(path)
+        handler.setFormatter(fmt)
+
+        logger.addHandler(handler)
+
+        return logger
 
     # Set up logger
     # version_tracking = {"version": "VERSION %s" % VERSION}
 
-    fmt = logging.Formatter(fmt="%(version)s : %(asctime)s : %(message)s",
+    fmt = logging.Formatter(fmt="%(asctime)s : %(message)s",
                             datefmt='%Y-%m-%d %H:%M:%S')
 
-    # Normal logging
-    logger = logging.getLogger("data_log")
-    logger.setLevel(logging.INFO)
+    bundle = zip(args, levels) if isinstance(levels, list) else zip(args, [levels] * len(args))
 
-    handler = logging.FileHandler(logpath)
-    handler.setFormatter(fmt)
-
-    logger.addHandler(handler)
-
-    # Error logging
-    err = logging.getLogger("err_log")
-    logger.setLevel(logging.WARNING)
-
-    handler = logging.FileHandler(errpath)
-    handler.setFormatter(fmt)
-
-    err.addHandler(handler)
-
-    logger = logging.LoggerAdapter(logger, kwargs)
-    err = logging.LoggerAdapter(err, kwargs)
-
-    return logger, err
+    return tuple([make_logger(path, level, i) for i, (path, level) in enumerate(bundle)])
