@@ -5,5 +5,7 @@ output/
 crc*
 
 feedback/
+ELLIPSE/errors
+ELLIPSE/output
 
 local_*
