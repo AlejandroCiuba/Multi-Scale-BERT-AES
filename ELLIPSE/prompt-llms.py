@@ -1,6 +1,9 @@
 # Prompting the Mistrel LLM on the Feedback Prize Datasets
 # Created by Alejandro Ciuba, alc307@pitt.edu
 from pathlib import Path
+from prompts import (make_prompt,
+                     make_rubric, )
+from langchain.prompts import PromptTemplate
 from vllm import (LLM,
                   SamplingParams, )
 
@@ -11,29 +14,27 @@ import pandas as pd
 
 def main(args: argparse.Namespace):
 
-    train_df = pd.read_csv(args.data[0])
-
-    print(train_df.head())
-
-    prompts = [
-        "Hello, my name is",
-        "The president of the United States is",
-        "The capital of France is",
-        "The future of AI is",
-    ]
-
-    sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
+    test_df = pd.read_csv(args.data[0])
+    rubric = make_rubric(args.data[1])
+    prompt = make_prompt(
+        rubric=rubric, 
+        scoring_range=(1, 5),
+        essay_prompt=test_df['prompt'][0],
+        essay=test_df['full_text'][0],
+        model_prefix="", 
+        model_suffix="",
+        )
 
     llm = LLM(model=args.models[0])
+    sampling_params = SamplingParams(temperature=0.01, max_tokens=4096)  # As in Joey's eval.py
 
-    outputs = llm.generate(prompts, sampling_params)
+    outputs = llm.generate(prompt.format(), sampling_params)
 
     # Print the outputs.
     for output in outputs:
         prompt = output.prompt
         generated_text = output.outputs[0].text
-        print(output)
-        print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
+        print(f"Prompt: {prompt!r}\n\nGenerated text: {generated_text!r}")
 
 
 def add_args(parser: argparse.ArgumentParser):
@@ -44,13 +45,13 @@ def add_args(parser: argparse.ArgumentParser):
         type=Path,
         nargs="+",
         required=True,
-        help="Data required.\n \n",
+        help="Data paths leading to the CSV data and then the JSON rubric.\n \n",
     )
 
     parser.add_argument(
         "-m",
         "--models",
-        type=Path,
+        type=str,
         nargs="+",
         default=["facebook/opt-125m"],  # Will not treat it as a 1-element array otherwise
         help="Data required.\n \n",
