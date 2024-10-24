@@ -91,7 +91,7 @@ def make_rubric(file: Path | str) -> str:
 
 if __name__ == "__main__":
 
-    rubric = make_rubric("data/ELLIPSErubric.json")
+    rubric = make_rubric("data/ELLIPSE/rubric.json")
     srange = (1, 5)
     essay = "I like to write essays. I just think they're so neat!"
     prompt = "Write about loving essays."
