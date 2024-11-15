@@ -16,11 +16,17 @@ from transformers import (BertConfig,
                           BertTokenizer, )
 
 import argparse
+import datetime
+import logger
+import logging
 import os
 import torch
 
 import pandas as pd
 import torch.nn as nn
+
+
+log = logging.getLogger()
 
 
 def load_dataset(data: Path, prompt: int,
@@ -36,8 +42,8 @@ def load_dataset(data: Path, prompt: int,
     dataset = ASAPDataset(
         data=df,
         train_splits=list(range(0,3)),
-        valid_split=3,
-        test_split=4,
+        valid_split=4,
+        test_split=3,
         prompt=prompt[0],
         transform=ToEncoded(tokenizer=tokenizer,
                             chunk_sizes=chunk_sizes),
@@ -78,7 +84,8 @@ def save_model(model:DocumentBertScoringModel, save_path: str, name: str):
 
 def main(args: argparse.Namespace):
 
-    print(f"===================== FINE-TUNING ON PROMPT {args.prompt[0]} =====================")
+    log.info(f"===================== {datetime.datetime.now().isoformat()} =====================")
+    log.info(f"===================== FINE-TUNING ON PROMPT {args.prompt[0]} =====================")
 
     # Have to do this because of how DocumentBertScoringModel parses the args
     args.prompt = args.prompt * 2
@@ -103,8 +110,8 @@ def main(args: argparse.Namespace):
     path = args.save_model[:len(args.save_model) - len(name)]
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
-    print("Training Set Size:", len(dataset))
-    print(f"Started training loop for {name}")
+    log.info("Training Set Size:", len(dataset))
+    log.info(f"Started training loop for {name}")
 
     prev_best = 1_000_000
     loss_tracker = []
@@ -128,11 +135,11 @@ def main(args: argparse.Namespace):
             loss.backward()
             optimizer.step()
 
-            print(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
+            log.info(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
             loss_tracker.append(loss.item())
 
         eval_loss = evaluate(model=model, dataset=dataset, criterion=criterion)
-        print(f"Evaluation loss at epoch {epoch}: {eval_loss:.5f}")
+        log.info(f"Evaluation loss at epoch {epoch}: {eval_loss:.5f}")
 
         if eval_loss < prev_best:
 
@@ -141,11 +148,11 @@ def main(args: argparse.Namespace):
 
             prev_best = eval_loss
 
-    print("Performing evaluation on the test set")
+    log.info("Performing evaluation on the test set")
     model.predict_for_regress(data=dataset.get_test(transform=False))  # The predict_for_regress function transforms the data
 
-    print("Losses:", ', '.join([str(l) for l in loss_tracker]))
-    print(f"Fine-tuning complete on prompt {args.prompt[0]}")
+    log.info("Losses:", ', '.join([str(l) for l in loss_tracker]))
+    log.info(f"Fine-tuning complete on prompt {args.prompt[0]}")
 
 
 def add_args(parser: argparse.ArgumentParser):
@@ -239,6 +246,14 @@ def add_args(parser: argparse.ArgumentParser):
         help="Device to run the training on.\n \n",
     )
 
+    parser.add_argument(
+        "-k",
+        "--log",
+        type=Path,
+        default="logs/finetune.log",
+        help="Logging output filepath.\n \n",
+    )
+
 
 if __name__ == "__main__":
 
@@ -251,5 +266,7 @@ if __name__ == "__main__":
 
     add_args(parser)
     args = parser.parse_args()
+
+    log, = logger.make_loggers(args.log, levels=logging.INFO)
 
     main(args)
