@@ -130,6 +130,7 @@ def main(args: argparse.Namespace):
             X, y = [x.to(args.device) for x in X], y.to(args.device)
 
             predictions = model(X)
+            log.debug(predictions)
             loss = criterion(predictions=predictions, targets=y)
 
             loss.backward()
@@ -267,6 +268,6 @@ if __name__ == "__main__":
     add_args(parser)
     args = parser.parse_args()
 
-    log, = logger.make_loggers(args.log, levels=logging.INFO)
+    log, = logger.make_loggers(args.log, levels=logging.DEBUG)
 
     main(args)
