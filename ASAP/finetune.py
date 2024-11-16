@@ -53,7 +53,7 @@ def load_dataset(data: Path, prompt: int,
 
 
 @torch.no_grad()
-def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: ASAPLoss) -> float:
+def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: ASAPLoss):
 
         model.eval()
         model.bert_regression_by_word_document.eval()
@@ -65,9 +65,9 @@ def evaluate(model:DocumentBertScoringModel, dataset: ASAPDataset, criterion: AS
         predictions = model(X)
         loss = criterion(predictions=predictions, targets=y)
 
-        model.predict_for_regress(data=dataset.get_valid(transform=False))
+        pearson, qwk = model.predict_for_regress(data=dataset.get_valid(transform=False))
 
-        return loss.item()
+        return loss.item(), pearson, qwk
 
 
 def save_model(model:DocumentBertScoringModel, save_path: str, name: str):
@@ -86,6 +86,7 @@ def main(args: argparse.Namespace):
 
     log.info(f"===================== {datetime.datetime.now().isoformat()} =====================")
     log.info(f"===================== FINE-TUNING ON PROMPT {args.prompt[0]} =====================")
+    log.info(f"Settings: {args.__str__()}")
 
     # Have to do this because of how DocumentBertScoringModel parses the args
     args.prompt = args.prompt * 2
@@ -103,6 +104,10 @@ def main(args: argparse.Namespace):
     model.bert_regression_by_chunk = nn.DataParallel(model.bert_regression_by_chunk)
     model.to(args.device)
 
+    model.float()
+    model.bert_regression_by_word_document.float()
+    model.bert_regression_by_chunk.float()
+
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
     criterion = ASAPLoss(dim=0, device=args.device)
 
@@ -110,11 +115,17 @@ def main(args: argparse.Namespace):
     path = args.save_model[:len(args.save_model) - len(name)]
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
-    log.info("Training Set Size:", len(dataset))
+    log.info(f"Train/Eval/Test: {len(dataset)}/{dataset.len_split('valid')}/{dataset.len_split('test')}")
+
     log.info(f"Started training loop for {name}")
 
     prev_best = 1_000_000
     loss_tracker = []
+
+    best_model = {"DocumentBertScoringModel": None,
+                  "bert_regression_by_word_document": None,
+                  "bert_regression_by_chunk": None, 
+                  "count": -1,}
 
     for epoch in tqdm(range(args.epochs)):
 
@@ -129,8 +140,12 @@ def main(args: argparse.Namespace):
             X, y = dataset[i: i + (args.batch_size)]  # List of 5 tensors containing args.batch_size Tensors each, args.batch_size scores
             X, y = [x.to(args.device) for x in X], y.to(args.device)
 
+            # for x in X:
+            #     if torch.any(torch.isnan(x)):
+            #         print(x)
+
             predictions = model(X)
-            log.debug(predictions)
+            # log.debug(predictions)
             loss = criterion(predictions=predictions, targets=y)
 
             loss.backward()
@@ -138,21 +153,41 @@ def main(args: argparse.Namespace):
 
             log.info(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
             loss_tracker.append(loss.item())
+            # exit()
 
-        eval_loss = evaluate(model=model, dataset=dataset, criterion=criterion)
-        log.info(f"Evaluation loss at epoch {epoch}: {eval_loss:.5f}")
+        eval_loss, eval_pearson, eval_qwk = evaluate(model=model, dataset=dataset, criterion=criterion)
+        log.info(f"{epoch}: Evaluation loss | Pearson | qwk : {eval_loss:.5f} | {eval_pearson:.5f} | {eval_qwk:.5f}")
 
         if eval_loss < prev_best:
 
-            print(f"Saving model {name} on epoch {epoch} ({eval_loss:.5f} is the new best loss!)")
+            log.info(f"Saving model {name} on epoch {epoch} ({eval_loss:.5f} is the new best loss!)")
             save_model(model=model, save_path=path, name=name)
 
             prev_best = eval_loss
 
-    log.info("Performing evaluation on the test set")
-    model.predict_for_regress(data=dataset.get_test(transform=False))  # The predict_for_regress function transforms the data
+            # Save the parameters
+            best_model["DocumentBertScoringModel"] = model.state_dict()
+            best_model["bert_regression_by_word_document"] = model.bert_regression_by_word_document.state_dict()
+            best_model["bert_regression_by_chunk"] = model.bert_regression_by_chunk.state_dict()
+            best_model["count"] = epoch
 
-    log.info("Losses:", ', '.join([str(l) for l in loss_tracker]))
+    # Reload the best model parameters
+    model.load_state_dict(best_model["DocumentBertScoringModel"])
+    model.bert_regression_by_word_document.load_state_dict(best_model["bert_regression_by_word_document"])
+    model.bert_regression_by_chunk.load_state_dict(best_model["bert_regression_by_chunk"])
+
+    log.info(f"Using best model from epoch {best_model['count']}")
+    log.info("Performing final evaluation on the evaluation set")
+
+    pearson, qwk = model.predict_for_regress(data=dataset.get_valid(transform=False))  # The predict_for_regress function transforms the data
+    log.info(f"Pearson: {pearson:.5f} | QWK: {qwk:.5f}")
+
+    log.info("Performing final evaluation on the test set")
+
+    pearson, qwk = model.predict_for_regress(data=dataset.get_test(transform=False))  # The predict_for_regress function transforms the data
+    log.info(f"Pearson: {pearson:.5f} | QWK: {qwk:.5f}")
+
+    log.info(f"Losses: {', '.join([str(l) for l in loss_tracker])}")
     log.info(f"Fine-tuning complete on prompt {args.prompt[0]}")
 
 
@@ -268,6 +303,6 @@ if __name__ == "__main__":
     add_args(parser)
     args = parser.parse_args()
 
-    log, = logger.make_loggers(args.log, levels=logging.DEBUG)
+    log, = logger.make_loggers(args.log, levels=logging.INFO)
 
     main(args)

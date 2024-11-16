@@ -1,0 +1,284 @@
+2024-11-16 16:04:12 : ===================== 2024-11-16T16:04:12.807195 =====================
+2024-11-16 16:04:12 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:04:12 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:11:52 : ===================== 2024-11-16T16:11:52.997775 =====================
+2024-11-16 16:11:52 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:11:52 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:12:00 : Training Set Size: 32
+2024-11-16 16:12:00 : Started training loop for p3.pt
+2024-11-16 16:12:04 : tensor([    nan,     nan, 29.2988, 33.2335,     nan,     nan,     nan, 24.7811,
+            nan,     nan,     nan,     nan, 30.7154,     nan,     nan,     nan,
+            nan,     nan,     nan,     nan,     nan,     nan,     nan,     nan,
+        28.5809,     nan,     nan,     nan,     nan,     nan,     nan,     nan],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:12:07 : 0/80 | 0/2: nan
+2024-11-16 16:31:44 : ===================== 2024-11-16T16:31:44.078633 =====================
+2024-11-16 16:31:44 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:31:44 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:31:46 : Training Set Size: 32
+2024-11-16 16:31:46 : Started training loop for p3.pt
+2024-11-16 16:31:49 : tensor([    nan,     nan, 28.6251, 33.2736,     nan,     nan,     nan, 24.6219,
+            nan,     nan,     nan,     nan, 31.7434,     nan,     nan,     nan,
+            nan,     nan,     nan,     nan,     nan,     nan,     nan,     nan,
+        29.3802,     nan,     nan,     nan,     nan,     nan,     nan,     nan],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:31:51 : 0/80 | 0/2: nan
+2024-11-16 16:35:58 : ===================== 2024-11-16T16:35:58.998763 =====================
+2024-11-16 16:35:58 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:35:58 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:36:00 : Training Set Size: 32
+2024-11-16 16:36:00 : Started training loop for p3.pt
+2024-11-16 16:36:03 : tensor([    nan,     nan, 29.4686, 33.2220,     nan,     nan,     nan, 24.3826,
+            nan,     nan,     nan,     nan, 31.4093,     nan,     nan,     nan,
+            nan,     nan,     nan,     nan,     nan,     nan,     nan,     nan,
+        28.7828,     nan,     nan,     nan,     nan,     nan,     nan,     nan],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:36:05 : 0/80 | 0/2: nan
+2024-11-16 16:39:05 : ===================== 2024-11-16T16:39:05.820708 =====================
+2024-11-16 16:39:05 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:39:05 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:39:07 : Training Set Size: 32
+2024-11-16 16:39:07 : Started training loop for p3.pt
+2024-11-16 16:39:10 : tensor([    nan,     nan, 28.8246, 33.4817,     nan,     nan,     nan, 24.6246,
+            nan,     nan,     nan,     nan, 31.4633,     nan,     nan,     nan,
+            nan,     nan,     nan,     nan,     nan,     nan,     nan,     nan,
+        29.4130,     nan,     nan,     nan,     nan,     nan,     nan,     nan],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:39:12 : 0/80 | 0/2: nan
+2024-11-16 16:42:21 : ===================== 2024-11-16T16:42:21.314638 =====================
+2024-11-16 16:42:21 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:42:21 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:42:22 : Training Set Size: 32
+2024-11-16 16:42:22 : Started training loop for p3.pt
+2024-11-16 16:42:26 : tensor([    nan,     nan, 28.8228, 33.3558,     nan,     nan,     nan, 24.2734,
+            nan,     nan,     nan,     nan, 30.5493,     nan,     nan,     nan,
+            nan,     nan,     nan,     nan,     nan,     nan,     nan,     nan,
+        28.6163,     nan,     nan,     nan,     nan,     nan,     nan,     nan],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:42:28 : 0/80 | 0/2: nan
+2024-11-16 16:45:17 : ===================== 2024-11-16T16:45:17.079381 =====================
+2024-11-16 16:45:17 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:45:17 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:45:19 : Training Set Size: 32
+2024-11-16 16:45:19 : Started training loop for p3.pt
+2024-11-16 16:45:22 : tensor([    nan,     nan, 28.6497, 33.3565,     nan,     nan,     nan, 24.1443,
+            nan,     nan,     nan,     nan, 31.2488,     nan,     nan,     nan,
+            nan,     nan,     nan,     nan,     nan,     nan,     nan,     nan,
+        29.2669,     nan,     nan,     nan,     nan,     nan,     nan,     nan],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:45:24 : 0/80 | 0/2: nan
+2024-11-16 16:47:21 : ===================== 2024-11-16T16:47:21.362947 =====================
+2024-11-16 16:47:21 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:47:21 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:47:22 : Training Set Size: 32
+2024-11-16 16:47:22 : Started training loop for p3.pt
+2024-11-16 16:47:25 : tensor([    nan,     nan, 28.2742, 33.3336,     nan,     nan,     nan, 24.1638,
+            nan,     nan,     nan,     nan, 30.0302,     nan,     nan,     nan,
+            nan,     nan,     nan,     nan,     nan,     nan,     nan,     nan,
+        29.4031,     nan,     nan,     nan,     nan,     nan,     nan,     nan],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:47:27 : 0/80 | 0/2: nan
+2024-11-16 16:50:23 : ===================== 2024-11-16T16:50:23.094890 =====================
+2024-11-16 16:50:23 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:50:23 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:50:24 : Training Set Size: 32
+2024-11-16 16:50:24 : Started training loop for p3.pt
+2024-11-16 16:50:27 : tensor([ 4.8119,  3.5907, 29.6426, 33.6305,  4.6131,  3.2314,  8.9508, 24.9959,
+         9.7163, 24.1468,  5.0991,  3.4674, 31.2208,  4.1425,  4.4669,  2.9757,
+         4.4072,  4.1979,  5.9295,  7.7084,  8.9065,  8.7453,  3.1876,  4.1109,
+        28.8759,  2.2085,  6.6125, 21.0265,  4.1892, 23.3967,  4.0763, 22.3466],
+       device='cuda:0', grad_fn=<AddBackward0>)
+2024-11-16 16:50:29 : 0/80 | 0/2: 89.94213
+2024-11-16 16:52:36 : ===================== 2024-11-16T16:52:36.043097 =====================
+2024-11-16 16:52:36 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:52:36 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=128, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:52:37 : Training Set Size: 128
+2024-11-16 16:52:37 : Started training loop for p3.pt
+2024-11-16 16:52:42 : 0/80 | 0/5: 87.97707
+2024-11-16 16:55:13 : ===================== 2024-11-16T16:55:13.207472 =====================
+2024-11-16 16:55:13 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:55:13 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=128, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:55:14 : Training Set Size: 128
+2024-11-16 16:55:14 : Started training loop for p3.pt
+2024-11-16 16:55:19 : 0/80 | 0/5: 88.90764
+2024-11-16 16:55:23 : 0/80 | 1/5: 0.88150
+2024-11-16 16:55:27 : 0/80 | 2/5: 2.17681
+2024-11-16 16:55:31 : 0/80 | 3/5: 1.64284
+2024-11-16 16:58:59 : ===================== 2024-11-16T16:58:59.533668 =====================
+2024-11-16 16:58:59 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 16:58:59 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=128, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 16:59:00 : Training Set Size: 128
+2024-11-16 16:59:00 : Started training loop for p3.pt
+2024-11-16 16:59:05 : 0/80 | 0/5: 88.83038
+2024-11-16 16:59:09 : 0/80 | 1/5: 0.92548
+2024-11-16 16:59:13 : 0/80 | 2/5: 2.39812
+2024-11-16 16:59:17 : 0/80 | 3/5: 1.71249
+2024-11-16 17:02:06 : ===================== 2024-11-16T17:02:06.736064 =====================
+2024-11-16 17:02:06 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 17:02:06 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 17:02:08 : Training Set Size: 32
+2024-11-16 17:02:08 : Started training loop for p3.pt
+2024-11-16 17:02:13 : ===================== 2024-11-16T17:02:13.188337 =====================
+2024-11-16 17:02:13 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 17:02:13 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=128, epochs=80, sample=32, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 17:02:13 : 0/80 | 0/2: 89.44585
+2024-11-16 17:02:14 : Training Set Size: 32
+2024-11-16 17:02:14 : Started training loop for p3.pt
+2024-11-16 17:02:19 : 0/80 | 0/1: 89.21426
+2024-11-16 17:07:46 : ===================== 2024-11-16T17:07:46.710836 =====================
+2024-11-16 17:07:46 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 17:07:46 : Hyperparameters: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=2, sample=-1, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 17:07:48 : Training Set Size: 1055
+2024-11-16 17:07:48 : Started training loop for p3.pt
+2024-11-16 17:07:53 : 0/2 | 0/33: 92.39171
+2024-11-16 17:07:57 : 0/2 | 1/33: 0.80461
+2024-11-16 17:08:00 : 0/2 | 2/33: 1.89468
+2024-11-16 17:08:04 : 0/2 | 3/33: 1.86927
+2024-11-16 17:08:08 : 0/2 | 4/33: 1.29136
+2024-11-16 17:08:12 : 0/2 | 5/33: 0.95591
+2024-11-16 17:08:16 : 0/2 | 6/33: 0.65024
+2024-11-16 17:08:20 : 0/2 | 7/33: 0.42479
+2024-11-16 17:08:24 : 0/2 | 8/33: 0.31937
+2024-11-16 17:08:28 : 0/2 | 9/33: 0.33240
+2024-11-16 17:08:31 : 0/2 | 10/33: 0.32845
+2024-11-16 17:08:35 : 0/2 | 11/33: 0.37701
+2024-11-16 17:08:39 : 0/2 | 12/33: 0.36360
+2024-11-16 17:08:43 : 0/2 | 13/33: 0.45805
+2024-11-16 17:08:47 : 0/2 | 14/33: 0.42820
+2024-11-16 17:08:51 : 0/2 | 15/33: 0.38573
+2024-11-16 17:08:55 : 0/2 | 16/33: 0.38221
+2024-11-16 17:08:59 : 0/2 | 17/33: 0.35471
+2024-11-16 17:09:02 : 0/2 | 18/33: 0.32104
+2024-11-16 17:09:06 : 0/2 | 19/33: 0.29701
+2024-11-16 17:09:10 : 0/2 | 20/33: 0.27544
+2024-11-16 17:09:14 : 0/2 | 21/33: 0.25706
+2024-11-16 17:09:18 : 0/2 | 22/33: 0.21668
+2024-11-16 17:09:22 : 0/2 | 23/33: 0.21360
+2024-11-16 17:09:26 : 0/2 | 24/33: 0.23551
+2024-11-16 17:09:30 : 0/2 | 25/33: 0.20451
+2024-11-16 17:09:34 : 0/2 | 26/33: 0.20067
+2024-11-16 17:09:38 : 0/2 | 27/33: 0.18484
+2024-11-16 17:09:41 : 0/2 | 28/33: 0.20532
+2024-11-16 17:09:45 : 0/2 | 29/33: 0.21758
+2024-11-16 17:09:49 : 0/2 | 30/33: 0.22101
+2024-11-16 17:09:53 : 0/2 | 31/33: 0.21338
+2024-11-16 17:09:57 : 0/2 | 32/33: 0.18637
+2024-11-16 17:10:28 : Evaluation loss at epoch 0: 0.25350
+2024-11-16 17:10:32 : 1/2 | 0/33: 0.27699
+2024-11-16 17:10:36 : 1/2 | 1/33: 0.30373
+2024-11-16 17:10:40 : 1/2 | 2/33: 0.28893
+2024-11-16 17:10:44 : 1/2 | 3/33: 0.30433
+2024-11-16 17:10:48 : 1/2 | 4/33: 0.24835
+2024-11-16 17:10:52 : 1/2 | 5/33: 0.20045
+2024-11-16 17:10:56 : 1/2 | 6/33: 0.15628
+2024-11-16 17:11:00 : 1/2 | 7/33: 0.18419
+2024-11-16 17:11:04 : 1/2 | 8/33: 0.14196
+2024-11-16 17:11:08 : 1/2 | 9/33: 0.13891
+2024-11-16 17:11:12 : 1/2 | 10/33: 0.10620
+2024-11-16 17:11:16 : 1/2 | 11/33: 0.08688
+2024-11-16 17:11:20 : 1/2 | 12/33: 0.10075
+2024-11-16 17:11:24 : 1/2 | 13/33: 0.08294
+2024-11-16 17:11:28 : 1/2 | 14/33: 0.09320
+2024-11-16 17:11:32 : 1/2 | 15/33: 0.08476
+2024-11-16 17:11:36 : 1/2 | 16/33: 0.07846
+2024-11-16 17:11:40 : 1/2 | 17/33: 0.09895
+2024-11-16 17:11:44 : 1/2 | 18/33: 0.08165
+2024-11-16 17:11:48 : 1/2 | 19/33: 0.09500
+2024-11-16 17:11:52 : 1/2 | 20/33: 0.06128
+2024-11-16 17:11:56 : 1/2 | 21/33: 0.09478
+2024-11-16 17:12:01 : 1/2 | 22/33: 0.09404
+2024-11-16 17:12:05 : 1/2 | 23/33: 0.07796
+2024-11-16 17:12:09 : 1/2 | 24/33: 0.06681
+2024-11-16 17:12:13 : 1/2 | 25/33: 0.07779
+2024-11-16 17:12:17 : 1/2 | 26/33: 0.07038
+2024-11-16 17:12:21 : 1/2 | 27/33: 0.08966
+2024-11-16 17:12:25 : 1/2 | 28/33: 0.09874
+2024-11-16 17:12:29 : 1/2 | 29/33: 0.10751
+2024-11-16 17:12:33 : 1/2 | 30/33: 0.12178
+2024-11-16 17:12:37 : 1/2 | 31/33: 0.11554
+2024-11-16 17:12:41 : 1/2 | 32/33: 0.10024
+2024-11-16 17:13:11 : Evaluation loss at epoch 1: 0.19242
+2024-11-16 17:13:11 : Performing evaluation on the test set
+2024-11-16 17:13:26 : Fine-tuning complete on prompt 3
+2024-11-16 18:26:18 : ===================== 2024-11-16T18:26:18.217825 =====================
+2024-11-16 18:26:18 : ===================== FINE-TUNING ON PROMPT 3 =====================
+2024-11-16 18:26:18 : Settings: Namespace(data='init/asap_5_splits.csv', bert_model_path='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p8_3', chunk_sizes='90_30_130_10', prompt=[3], batch_size=32, epochs=2, sample=-1, learning_rate=6e-05, result_file='results/finetune/p3-1.txt', save_model='../../../ix/ix_models/Multi-Scale-BERT-AES-Models/p3/p3.pt', device='cuda', log=PosixPath('logs/test2.log'))
+2024-11-16 18:26:27 : Train/Eval/Test: 1055/336/335
+2024-11-16 18:26:27 : Started training loop for p3.pt
+2024-11-16 18:26:35 : 0/2 | 0/33: 94.13527
+2024-11-16 18:26:39 : 0/2 | 1/33: 0.75408
+2024-11-16 18:26:43 : 0/2 | 2/33: 1.88693
+2024-11-16 18:26:47 : 0/2 | 3/33: 1.62419
+2024-11-16 18:26:51 : 0/2 | 4/33: 1.40406
+2024-11-16 18:26:55 : 0/2 | 5/33: 1.01510
+2024-11-16 18:26:59 : 0/2 | 6/33: 0.75076
+2024-11-16 18:27:03 : 0/2 | 7/33: 0.44485
+2024-11-16 18:27:07 : 0/2 | 8/33: 0.34074
+2024-11-16 18:27:10 : 0/2 | 9/33: 0.31272
+2024-11-16 18:27:14 : 0/2 | 10/33: 0.32310
+2024-11-16 18:27:18 : 0/2 | 11/33: 0.33680
+2024-11-16 18:27:22 : 0/2 | 12/33: 0.38192
+2024-11-16 18:27:26 : 0/2 | 13/33: 0.41448
+2024-11-16 18:27:30 : 0/2 | 14/33: 0.42603
+2024-11-16 18:27:34 : 0/2 | 15/33: 0.40422
+2024-11-16 18:27:38 : 0/2 | 16/33: 0.40293
+2024-11-16 18:27:42 : 0/2 | 17/33: 0.34632
+2024-11-16 18:27:46 : 0/2 | 18/33: 0.32085
+2024-11-16 18:27:50 : 0/2 | 19/33: 0.32253
+2024-11-16 18:27:54 : 0/2 | 20/33: 0.25003
+2024-11-16 18:27:58 : 0/2 | 21/33: 0.23807
+2024-11-16 18:28:01 : 0/2 | 22/33: 0.21572
+2024-11-16 18:28:05 : 0/2 | 23/33: 0.23378
+2024-11-16 18:28:09 : 0/2 | 24/33: 0.20245
+2024-11-16 18:28:13 : 0/2 | 25/33: 0.20078
+2024-11-16 18:28:17 : 0/2 | 26/33: 0.20106
+2024-11-16 18:28:21 : 0/2 | 27/33: 0.19199
+2024-11-16 18:28:25 : 0/2 | 28/33: 0.20469
+2024-11-16 18:28:29 : 0/2 | 29/33: 0.21577
+2024-11-16 18:28:33 : 0/2 | 30/33: 0.22158
+2024-11-16 18:28:37 : 0/2 | 31/33: 0.18835
+2024-11-16 18:28:41 : 0/2 | 32/33: 0.20108
+2024-11-16 18:29:12 : 0: Evaluation loss | Pearson | qwk : 0.24772 | 0.70800 | 0.48400
+2024-11-16 18:29:12 : Saving model p3.pt on epoch 0 (0.24772 is the new best loss!)
+2024-11-16 18:29:18 : 1/2 | 0/33: 0.27954
+2024-11-16 18:29:22 : 1/2 | 1/33: 0.29595
+2024-11-16 18:29:26 : 1/2 | 2/33: 0.28333
+2024-11-16 18:29:30 : 1/2 | 3/33: 0.26657
+2024-11-16 18:29:34 : 1/2 | 4/33: 0.23761
+2024-11-16 18:29:39 : 1/2 | 5/33: 0.16557
+2024-11-16 18:29:43 : 1/2 | 6/33: 0.13787
+2024-11-16 18:29:47 : 1/2 | 7/33: 0.13865
+2024-11-16 18:29:51 : 1/2 | 8/33: 0.11414
+2024-11-16 18:29:55 : 1/2 | 9/33: 0.11811
+2024-11-16 18:29:59 : 1/2 | 10/33: 0.08908
+2024-11-16 18:30:03 : 1/2 | 11/33: 0.11822
+2024-11-16 18:30:07 : 1/2 | 12/33: 0.08027
+2024-11-16 18:30:11 : 1/2 | 13/33: 0.08879
+2024-11-16 18:30:16 : 1/2 | 14/33: 0.08187
+2024-11-16 18:30:20 : 1/2 | 15/33: 0.10984
+2024-11-16 18:30:24 : 1/2 | 16/33: 0.09575
+2024-11-16 18:30:28 : 1/2 | 17/33: 0.09153
+2024-11-16 18:30:32 : 1/2 | 18/33: 0.08654
+2024-11-16 18:30:36 : 1/2 | 19/33: 0.08055
+2024-11-16 18:30:40 : 1/2 | 20/33: 0.08941
+2024-11-16 18:30:44 : 1/2 | 21/33: 0.07180
+2024-11-16 18:30:48 : 1/2 | 22/33: 0.07075
+2024-11-16 18:30:52 : 1/2 | 23/33: 0.07503
+2024-11-16 18:30:57 : 1/2 | 24/33: 0.06341
+2024-11-16 18:31:01 : 1/2 | 25/33: 0.06953
+2024-11-16 18:31:05 : 1/2 | 26/33: 0.07931
+2024-11-16 18:31:09 : 1/2 | 27/33: 0.07860
+2024-11-16 18:31:13 : 1/2 | 28/33: 0.08453
+2024-11-16 18:31:17 : 1/2 | 29/33: 0.11921
+2024-11-16 18:31:21 : 1/2 | 30/33: 0.10498
+2024-11-16 18:31:25 : 1/2 | 31/33: 0.10008
+2024-11-16 18:31:29 : 1/2 | 32/33: 0.08792
+2024-11-16 18:32:00 : 1: Evaluation loss | Pearson | qwk : 0.20348 | 0.69300 | 0.49500
+2024-11-16 18:32:00 : Saving model p3.pt on epoch 1 (0.20348 is the new best loss!)
+2024-11-16 18:32:07 : Using best model from epoch 1
+2024-11-16 18:32:07 : Performing final evaluation on the evaluation set
+2024-11-16 18:32:22 : Pearson: 0.69300 | QWK: 0.49500
+2024-11-16 18:32:22 : Performing final evaluation on the test set
+2024-11-16 18:32:38 : Pearson: 0.76200 | QWK: 0.48100
+2024-11-16 18:32:38 : Losses: 94.13526916503906, 0.7540783286094666, 1.8869333267211914, 1.62418794631958, 1.4040592908859253, 1.0150988101959229, 0.7507616281509399, 0.4448547959327698, 0.3407428562641144, 0.3127223253250122, 0.3231033980846405, 0.3367968201637268, 0.3819161057472229, 0.41448381543159485, 0.42603203654289246, 0.4042150676250458, 0.4029327630996704, 0.34631583094596863, 0.3208472728729248, 0.3225342333316803, 0.25002992153167725, 0.2380715012550354, 0.2157207429409027, 0.23378190398216248, 0.2024460732936859, 0.20077982544898987, 0.20105725526809692, 0.19199499487876892, 0.2046860009431839, 0.21576733887195587, 0.22157736122608185, 0.18835122883319855, 0.2010791152715683, 0.279544472694397, 0.2959508001804352, 0.2833279073238373, 0.2665693759918213, 0.23760586977005005, 0.165570929646492, 0.13786843419075012, 0.13864651322364807, 0.11413964629173279, 0.11810765415430069, 0.0890783742070198, 0.11821839958429337, 0.08027160912752151, 0.08879144489765167, 0.08187291026115417, 0.10984237492084503, 0.09575419127941132, 0.09152592718601227, 0.08653587102890015, 0.080547034740448, 0.0894090011715889, 0.07180021703243256, 0.07074722647666931, 0.0750340074300766, 0.06341229379177094, 0.06953169405460358, 0.07930983603000641, 0.078604556620121, 0.08452918380498886, 0.11921017616987228, 0.10497903823852539, 0.10007814317941666, 0.08791658282279968
+2024-11-16 18:32:38 : Fine-tuning complete on prompt 3

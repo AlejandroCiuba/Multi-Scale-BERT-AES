@@ -49,13 +49,20 @@ class DocumentBertSentenceChunkAttentionLSTM(BertPreTrainedModel):
                                         self.bert.config.hidden_size), 
                                         dtype=torch.float, 
                                         device=device, )
+        
+        # for param in self.bert.parameters():
+        #     if bool(torch.any(torch.isnan(param))):
+        #         print("HERE:", param)
+        #         exit()
 
         for doc_id in range(document_batch.shape[0]):
             bert_output[doc_id][:bert_batch_size] = self.dropout(self.bert(document_batch[doc_id][:bert_batch_size,0],
                                                                            token_type_ids=document_batch[doc_id][:bert_batch_size, 1],
                                                                            attention_mask=document_batch[doc_id][:bert_batch_size, 2])[1], )
+            # print(f"Doc_id {doc_id}:",bert_output)
         output, (_, _) = self.lstm(bert_output.permute(1, 0, 2))
         output = output.permute(1, 0, 2)
+        # print("After LSTM:", output)
 
         # (batch_size, seq_len, num_hiddens)
         attention_w = torch.tanh(torch.matmul(output, self.w_omega) + self.b_omega)
@@ -63,12 +70,13 @@ class DocumentBertSentenceChunkAttentionLSTM(BertPreTrainedModel):
         attention_score = F.softmax(attention_u, dim=1)  # (batch_size, seq_len, 1)
         attention_hidden = output * attention_score  # (batch_size, seq_len, num_hiddens)
         attention_hidden = torch.sum(attention_hidden, dim=1)  # 加权求和 (batch_size, num_hiddens)
+        # print("After Attention:", attention_hidden)
 
         prediction = self.mlp(attention_hidden)
 
         assert prediction.shape[0] == document_batch.shape[0]
 
-        return prediction
+        return torch.nan_to_num(prediction)
 
 
 class DocumentBertCombineWordDocumentLinear(BertPreTrainedModel):

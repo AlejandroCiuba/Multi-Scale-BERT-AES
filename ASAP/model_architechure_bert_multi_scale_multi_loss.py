@@ -92,7 +92,7 @@ class DocumentBertScoringModel(nn.Module):
         assert len(data) - 1 == len(self.chunk_sizes)
 
         predictions = torch.add(predictions, word_document_predictions)
-
+        # print("Word Document Predictions:", predictions)
         # Add the chunk-level predictions
         for chunk_data, batch_size in zip(data[1:], self.bert_batch_sizes):
 
@@ -103,6 +103,7 @@ class DocumentBertScoringModel(nn.Module):
             )
 
             chunk_predictions = torch.squeeze(chunk_predictions)
+            # print(f"Batch Size: {batch_size}\nChunk Predictions:", chunk_predictions)
 
             predictions = torch.add(predictions, chunk_predictions)
 
@@ -196,7 +197,7 @@ class DocumentBertScoringModel(nn.Module):
         correct_output = correct_output.cpu().numpy()
 
         self.to_file(labels=correct_output, predictions=prediction_scores)
-        self.evaluate(labels=correct_output, predictions=prediction_scores)
+        return self.evaluate(labels=correct_output, predictions=prediction_scores)
 
     def to_file(self, labels: List[Union[int, float]], predictions: List[float]):
         with open(self.args['result_file'], "w") as outfile:

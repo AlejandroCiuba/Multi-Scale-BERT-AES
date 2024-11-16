@@ -103,6 +103,9 @@ class ASAPDataset(Dataset):
 
     def __len__(self):
         return len(self.X_train)
+    
+    def len_split(self, split = 'train'):
+        return len(getattr(self, f"X_{split}"))
 
     def get_valid(self, transform: bool = True):
 
