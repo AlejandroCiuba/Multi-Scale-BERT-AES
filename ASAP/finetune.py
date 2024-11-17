@@ -86,7 +86,9 @@ def main(args: argparse.Namespace):
 
     log.info(f"===================== {datetime.datetime.now().isoformat()} =====================")
     log.info(f"===================== FINE-TUNING ON PROMPT {args.prompt[0]} =====================")
+
     log.info(f"Settings: {args.__str__()}")
+    log.info(f"Additional Comments: {args.comment}")
 
     # Have to do this because of how DocumentBertScoringModel parses the args
     args.prompt = args.prompt * 2
@@ -116,7 +118,6 @@ def main(args: argparse.Namespace):
     batches_per_epoch = (len(dataset) // args.batch_size) + 1
 
     log.info(f"Train/Eval/Test: {len(dataset)}/{dataset.len_split('valid')}/{dataset.len_split('test')}")
-
     log.info(f"Started training loop for {name}")
 
     prev_best = 1_000_000
@@ -288,6 +289,14 @@ def add_args(parser: argparse.ArgumentParser):
         type=Path,
         default="logs/finetune.log",
         help="Logging output filepath.\n \n",
+    )
+
+    parser.add_argument(
+        "-f",
+        "--comment",
+        type=str,
+        default="No additional comments.",
+        help="Additional experiment comments, should be one string.\n \n",
     )
 
 
