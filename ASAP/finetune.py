@@ -151,16 +151,16 @@ def main(args: argparse.Namespace):
             loss.backward()
             optimizer.step()
 
-            log.info(f"{epoch}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
+            log.info(f"{epoch + 1}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
             loss_tracker.append(loss.item())
             # exit()
 
         eval_loss, eval_pearson, eval_qwk = evaluate(model=model, dataset=dataset, criterion=criterion)
-        log.info(f"{epoch}: Evaluation loss | Pearson | qwk : {eval_loss:.5f} | {eval_pearson:.5f} | {eval_qwk:.5f}")
+        log.info(f"{epoch + 1}: Evaluation loss | Pearson | qwk : {eval_loss:.5f} | {eval_pearson:.5f} | {eval_qwk:.5f}")
 
         if eval_loss < prev_best:
 
-            log.info(f"Saving model {name} on epoch {epoch} ({eval_loss:.5f} is the new best loss!)")
+            log.info(f"Saving model {name} on epoch {epoch + 1} ({eval_loss:.5f} is the new best loss!)")
             save_model(model=model, save_path=path, name=name)
 
             prev_best = eval_loss
@@ -206,7 +206,7 @@ def add_args(parser: argparse.ArgumentParser):
         "--bert_model_path",
         type=str,
         required=True,
-        help="Model.\n \n",
+        help="Model and tokenizer (local or HuggingFace).\n \n",
     )
 
     parser.add_argument(

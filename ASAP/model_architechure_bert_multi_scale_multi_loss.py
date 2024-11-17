@@ -64,12 +64,12 @@ class DocumentBertScoringModel(nn.Module):
         print("chunk_sizes_str:%s, bert_batch_size_str:%s" % (chunk_sizes_str, bert_batch_size_str))
 
         self.bert_regression_by_word_document = DocumentBertCombineWordDocumentLinear.from_pretrained(
-            self.args['bert_model_path'] + "/word_document",
+            "google-bert/bert-base-uncased", # self.args['bert_model_path'] + "/word_document",
             config=config,
         )
 
         self.bert_regression_by_chunk = DocumentBertSentenceChunkAttentionLSTM.from_pretrained(
-            self.args['bert_model_path'] + "/chunk",
+            "google-bert/bert-base-uncased", # self.args['bert_model_path'] + "/chunk",
             config=config,
         )
 
