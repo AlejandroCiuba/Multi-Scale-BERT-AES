@@ -156,7 +156,7 @@ def main(args: argparse.Namespace):
             # exit()
 
         eval_loss, eval_pearson, eval_qwk = evaluate(model=model, dataset=dataset, criterion=criterion)
-        log.info(f"{epoch + 1}: Evaluation loss | Pearson | qwk : {eval_loss:.5f} | {eval_pearson:.5f} | {eval_qwk:.5f}")
+        log.info(f"{epoch + 1}: Evaluation loss: {eval_loss:.5f} | Pearson: {eval_pearson:.5f} | QWK:  {eval_qwk:.5f}")
 
         if eval_loss < prev_best:
 
