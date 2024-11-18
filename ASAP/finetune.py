@@ -152,7 +152,7 @@ def main(args: argparse.Namespace):
             loss.backward()
             optimizer.step()
 
-            log.info(f"{epoch + 1}/{args.epochs} | {i}/{batches_per_epoch}: {loss.item():0.5f}")
+            log.info(f"{epoch + 1}/{args.epochs} | {i + 1}/{batches_per_epoch}: {loss.item():0.5f}")
             loss_tracker.append(loss.item())
             # exit()
 
