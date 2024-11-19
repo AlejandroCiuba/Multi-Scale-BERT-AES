@@ -1,0 +1,39 @@
+============== PROMPT 8 ==============
+Using best model from epoch 19
+Performing final evaluation on the evaluation set
+Pearson: 0.56000 | QWK: 0.41300
+
+============== PROMPT 7 ==============
+Using best model from epoch 23
+Performing final evaluation on the evaluation set
+Pearson: 0.72800 | QWK: 0.71500
+
+============== PROMPT 6 ==============
+Using best model from epoch 35
+Performing final evaluation on the evaluation set
+Pearson: 0.75400 | QWK: 0.55200
+
+============== PROMPT 5 ==============
+Using best model from epoch 4
+Performing final evaluation on the evaluation set
+Pearson: 0.77900 | QWK: 0.73400
+
+============== PROMPT 4 ==============
+Using best model from epoch 28
+Performing final evaluation on the evaluation set
+Pearson: 0.71200 | QWK: 0.43000
+
+============== PROMPT 3 ==============
+Using best model from epoch 15
+Performing final evaluation on the evaluation set
+Pearson: 0.54400 | QWK: 0.33100
+
+============== PROMPT 2 ==============
+Using best model from epoch 3
+Performing final evaluation on the evaluation set
+Pearson: 0.53600 | QWK: 0.44700
+
+============== PROMPT 1 ==============
+Using best model from epoch 19
+Performing final evaluation on the evaluation set
+Pearson: 0.76100 | QWK: 0.74100
