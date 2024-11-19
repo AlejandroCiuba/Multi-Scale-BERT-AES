@@ -86,7 +86,8 @@ class DocumentBertScoringModel(nn.Module):
         predictions = torch.zeros((data[0].shape[0])).to(device=self.args['device'])
 
         # Get the document-level predictions
-        word_document_predictions = self.bert_regression_by_word_document(data[0], device=self.args['device'])
+        print(data)
+        word_document_predictions = self.bert_regression_by_word_document(document_batch=data[0], device=self.args['device'])
         word_document_predictions = torch.squeeze(word_document_predictions)
 
         assert len(data) - 1 == len(self.chunk_sizes)
@@ -97,7 +98,7 @@ class DocumentBertScoringModel(nn.Module):
         for chunk_data, batch_size in zip(data[1:], self.bert_batch_sizes):
 
             chunk_predictions = self.bert_regression_by_chunk(
-                chunk_data,
+                document_batch=chunk_data,
                 device=self.args['device'],
                 bert_batch_size=batch_size,
             )
